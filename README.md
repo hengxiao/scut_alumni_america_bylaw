@@ -41,6 +41,7 @@ By-Law/
 │   ├── 11-conflict-of-interest/
 │   ├── 12-dissolution/
 │   └── 13-federal-irs-501c7-compliance/
+│       (each subdirectory contains: definition.md · status-quo.md · policy-questions.md · examples-analysis.md)
 └── proposal/
     ├── rationale.md           ← Issues identified; justification for proposed changes
     └── draft.md               ← Working draft of the proposed new By-Laws
@@ -64,6 +65,7 @@ By-Law/
 | Phase | Status |
 |---|---|
 | Comparable organization research (examples/) | **Complete** |
+| Per-topic cross-example analysis (planning/*/examples-analysis.md) | **Complete** |
 | Issue analysis and rationale | Not started |
 | Draft new By-Laws | Not started |
 | Board review and sign-off | Not started |

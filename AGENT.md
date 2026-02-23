@@ -50,6 +50,7 @@ The repository does **not** contain application code. All files are Markdown (or
 │   ├── 11-conflict-of-interest/
 │   ├── 12-dissolution/
 │   └── 13-federal-irs-501c7-compliance/
+│       (each subdirectory contains: definition.md · status-quo.md · policy-questions.md · examples-analysis.md)
 └── proposal/
     ├── rationale.md           ← Issues with the current By-Laws and justification for changes
     └── draft.md               ← Working draft of the proposed new By-Laws
@@ -59,13 +60,14 @@ The repository does **not** contain application code. All files are Markdown (or
 
 ## Planning Directory File Pattern
 
-Every subdirectory under `planning/` contains exactly three files:
+Every subdirectory under `planning/` contains four files:
 
 | File | Content |
 |---|---|
 | `definition.md` | Scope of the topic and why it matters to the By-Laws |
 | `status-quo.md` | What the current By-Laws say about this topic, plus identified gaps |
 | `policy-questions.md` | Decisions the organization must make before drafting can begin |
+| `examples-analysis.md` | How the 10 reference organizations handle this topic — approaches, pros/cons, and recommendations |
 
 Read `planning/README.md` for a full explanation.
 
@@ -73,13 +75,14 @@ Read `planning/README.md` for a full explanation.
 
 ## Intended Workflow
 
-1. Read `examples/README.md` for a prioritized list of governance improvements surfaced from comparable organizations
-2. Complete policy questions in each `planning/` topic directory, informed by the `examples/` analyses
-3. Fill in `proposal/rationale.md` with identified issues and proposed fixes
-4. Write `proposal/draft.md` using `current_version.md` as the baseline
-5. Board reviews draft; 6+ directors sign off
-6. Secretary issues 30-day notice to all members
-7. Membership meeting: 2/3 majority vote required for adoption
+1. Read `examples/README.md` for a cross-cutting prioritized list of governance improvements
+2. For each `planning/` topic, read `examples-analysis.md` for how peer organizations handle that topic (approaches, pros/cons, recommendations)
+3. Complete policy questions in each `planning/` topic directory, informed by the examples analyses
+4. Fill in `proposal/rationale.md` with identified issues and proposed fixes
+5. Write `proposal/draft.md` using `current_version.md` as the baseline
+6. Board reviews draft; 6+ directors sign off
+7. Secretary issues 30-day notice to all members
+8. Membership meeting: 2/3 majority vote required for adoption
 
 The amendment procedure is defined in Article VIII of the current By-Laws and summarized in `PROCESS.md`.
 
@@ -113,10 +116,10 @@ Read `examples/README.md` first — it indexes all ten organizations and synthes
 ## Current Project Status
 
 - **`examples/`** — **Complete.** Ten comparable organizations researched, bylaws drafted, and individual comparative analyses written.
-- **`planning/`** — Policy questions drafted for all 13 topics; **not yet answered** by the organization.
+- **`planning/`** — **Research phase complete.** All 13 topics have `definition.md`, `status-quo.md`, `policy-questions.md`, and `examples-analysis.md`. Policy questions have **not yet been answered** by the organization.
 - **`proposal/rationale.md`** and **`proposal/draft.md`** — Empty placeholders; drafting has not begun.
 
-Recommended next step: use `examples/README.md` as input when answering the policy questions in `planning/`.
+Recommended next step: use `examples-analysis.md` and `examples/README.md` as inputs when answering the policy questions in each `planning/` topic. The research has surfaced several high-priority issues (dissolution clause, indemnification, committee structure, quarterly board meetings) that should be resolved first.
 
 ---
 
