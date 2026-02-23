@@ -21,6 +21,20 @@ The repository does **not** contain application code. All files are Markdown (or
 ├── PROCESS.md                 ← Formal amendment procedure (Article VIII) and project timeline
 ├── current_version.md         ← Current By-Laws (adopted December 10, 2002) — the baseline
 ├── current_version.html       ← Original HTML source of the current By-Laws (archival)
+├── report-zh.md               ← Chinese-language project status report
+├── examples/                  ← Bylaws and analysis for 10 comparable organizations
+│   ├── README.md              ← Index and cross-cutting governance recommendations (read this first)
+│   ├── 01-puaasc/             ← Peking Univ. Alumni Assoc. of Southern California (CA mutual benefit)
+│   ├── 02-pkuaa-ne/           ← Peking Univ. Alumni Assoc. of New England (MA 501(c)(3))
+│   ├── 03-ustcaf/             ← USTC Alumni Foundation (DE 501(c)(3), all-volunteer)
+│   ├── 04-fdaagla/            ← Fudan Univ. Alumni Assoc. of Greater Los Angeles (CA nonprofit)
+│   ├── 05-xtuaana/            ← Xiangtan Univ. Alumni Assoc. of North America (near-identical to SCUT)
+│   ├── 06-ctuaaa/             ← Chiao Tung Univ. Alumni Assoc. in America (national federation, est. 1943)
+│   ├── 07-sjtu-sv/            ← SJTU Alumni Assoc. in Silicon Valley (CA 501(c)(3))
+│   ├── 08-hcssa/              ← Harvard Chinese Students & Scholars Assoc. (student org, 2023 constitution)
+│   ├── 09-taa-gny/            ← Tsinghua Alumni Assoc. of Greater New York (NY 501(c)(3), est. 1979)
+│   └── 10-oca/                ← OCA – Asian Pacific American Advocates (national 501(c)(3), est. 1973)
+│       (each subdirectory contains: readme.md · bylaw.md · analysis.md)
 ├── planning/                  ← Pre-drafting research organized by topic
 │   ├── README.md              ← How the planning directory works; what each file type means
 │   ├── 01-vision-and-purpose/
@@ -59,12 +73,13 @@ Read `planning/README.md` for a full explanation.
 
 ## Intended Workflow
 
-1. Complete policy questions in each `planning/` topic directory
-2. Fill in `proposal/rationale.md` with identified issues and proposed fixes
-3. Write `proposal/draft.md` using `current_version.md` as the baseline
-4. Board reviews draft; 6+ directors sign off
-5. Secretary issues 30-day notice to all members
-6. Membership meeting: 2/3 majority vote required for adoption
+1. Read `examples/README.md` for a prioritized list of governance improvements surfaced from comparable organizations
+2. Complete policy questions in each `planning/` topic directory, informed by the `examples/` analyses
+3. Fill in `proposal/rationale.md` with identified issues and proposed fixes
+4. Write `proposal/draft.md` using `current_version.md` as the baseline
+5. Board reviews draft; 6+ directors sign off
+6. Secretary issues 30-day notice to all members
+7. Membership meeting: 2/3 majority vote required for adoption
 
 The amendment procedure is defined in Article VIII of the current By-Laws and summarized in `PROCESS.md`.
 
@@ -81,9 +96,29 @@ The amendment procedure is defined in Article VIII of the current By-Laws and su
 
 ---
 
+## Examples Directory File Pattern
+
+Every subdirectory under `examples/` contains exactly three files:
+
+| File | Content |
+|---|---|
+| `readme.md` | Background on the organization: history, legal status, mission, governance structure |
+| `bylaw.md` | Representative bylaws for the organization in markdown format |
+| `analysis.md` | Comparative analysis: similarities and differences with SCUT Alumni America; what SCUT can learn |
+
+Read `examples/README.md` first — it indexes all ten organizations and synthesizes cross-cutting governance themes with a prioritized recommendation list.
+
+---
+
 ## Current Project Status
 
-All phases are **not started**. The `proposal/rationale.md` and `proposal/draft.md` files are empty placeholders. Work should begin in the `planning/` directories by answering the policy questions before any drafting happens.
+- **`examples/`** — **Complete.** Ten comparable organizations researched, bylaws drafted, and individual comparative analyses written.
+- **`planning/`** — Policy questions drafted for all 13 topics; **not yet answered** by the organization.
+- **`proposal/rationale.md`** and **`proposal/draft.md`** — Empty placeholders; drafting has not begun.
+
+Recommended next step: use `examples/README.md` as input when answering the policy questions in `planning/`.
+
+---
 
 ---
 
