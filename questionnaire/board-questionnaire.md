@@ -19,6 +19,7 @@ This questionnaire covers all major policy areas. Your answers will be synthesiz
 
 ## How to Complete This Questionnaire
 
+- **You do not need to answer every question.** Feel free to skip any question you do not have a view on — a blank answer is perfectly fine. Focus your energy on the topics you care most about.
 - Answer each question in your own words. There are no right or wrong answers.
 - For each question, the **"Your response should address:"** box tells you what specific points to cover. You do not need to answer every sub-point if some do not apply.
 - If you are unsure about a question, indicate that and explain what additional information you would need to form a view.
