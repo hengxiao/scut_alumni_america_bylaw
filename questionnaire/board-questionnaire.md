@@ -43,6 +43,7 @@ This questionnaire covers all major policy areas. Your answers will be synthesiz
 11. [Conflict of Interest](#11-conflict-of-interest)
 12. [Dissolution](#12-dissolution)
 13. [Federal IRS 501(c)(7) Compliance](#13-federal-irs-501c7-compliance)
+14. [Independent Status and Organizational Autonomy](#14-independent-status-and-organizational-autonomy)
 
 ---
 
@@ -954,6 +955,101 @@ Under the Pension Protection Act of 2006, three consecutive years of failing to 
 
 ---
 
+## 14. Independent Status and Organizational Autonomy
+
+*In March 2026, U.S. House committee chairs formally asked Secretary of State Rubio to designate the Chinese Students and Scholars Association (CSSA) as a foreign mission, citing CSSA chapters that accept consulate guidance, require loyalty pledges, and allow the Chinese Embassy to approve leadership candidates. As an alumni association whose name is connected to a Chinese university, SCUT Alumni America faces similar scrutiny. The current By-Laws contain no independence declaration, no prohibition on foreign government oversight, and no member privacy protections. This section asks the Board to establish explicit independence provisions.*
+
+---
+
+### Q14.1 — Organizational Independence Declaration
+
+The absence of an explicit independence declaration is the defining governance gap that drew congressional attention to CSSA chapters. An organization that cannot point to such language in its governing documents is at elevated risk in the current U.S. regulatory environment.
+
+**Your response should address:**
+- Should the By-Laws include an explicit statement that this organization is independent of South China University of Technology, the People's Republic of China, the Chinese Communist Party, and any foreign government body — and that all governance decisions are made solely by the membership under U.S. law?
+- Where should this declaration appear — in the Purposes article, as a standalone article, or both?
+- Should it name specific entities (SCUT, PRC, CCP, Chinese embassy/consulates) or use broader language covering all foreign governments and institutions?
+- Should the independence declaration be designated as a "core provision" requiring a higher amendment threshold — making it harder to quietly remove in the future?
+
+> **Your answer:**
+>
+>
+>
+>
+
+---
+
+### Q14.2 — Relationship with SCUT: Alumni Affinity vs. Institutional Dependency
+
+The current By-Laws commit the organization to "enhance the connection between the members and South China University of Technology" and "help and support the development of South China University of Technology." These purposes are legitimate expressions of alumni affinity but must be bounded so they cannot be read as creating an institutional dependency.
+
+**Your response should address:**
+- Should the current language in Article III §1(d)–(e) be retained, revised, or replaced?
+- If revised, should the new language explicitly state that the connection to SCUT is one of *alumni affinity* rather than representation or agency — and that the organization does not act as SCUT's representative or agent?
+- Should the By-Laws state that any cooperation with SCUT (e.g., joint events, scholarship coordination) requires Board approval and reflects the organization's independent judgment — not SCUT's direction?
+- Should there be limits on the types of cooperation the organization may undertake with SCUT — for example, cultural and professional events are permitted, but activities that could constitute lobbying, information gathering, or fundraising on SCUT's behalf are not?
+
+> **Your answer:**
+>
+>
+>
+>
+
+---
+
+### Q14.3 — Prohibition on Foreign Government Oversight
+
+This is the specific provision that was missing from CSSA chapters that accepted guidance from the Chinese consulate-general.
+
+**Your response should address:**
+- Should the By-Laws include an explicit prohibition on accepting operational guidance, instructions, or direction from any foreign government, embassy, consulate, or state-affiliated institution?
+- Should the prohibition extend to informal communications and relationships, not just formal written directives?
+- Should it specifically name the Chinese government and related entities, or use broader language covering all foreign governments?
+- If an officer or director receives unsolicited guidance from a foreign government representative, should the By-Laws require them to decline, document, and report the contact to the Board?
+
+> **Your answer:**
+>
+>
+>
+>
+
+---
+
+### Q14.4 — Leadership Independence and Member Privacy
+
+Congressional findings about the CSSA included specific evidence that the Chinese Embassy asserted approval authority over leadership candidates, and that some chapters monitored and reported on member activities.
+
+**Your response should address:**
+- Should the By-Laws explicitly state that no foreign government, institution, embassy, consulate, or official has any formal or informal role in nominating, approving, confirming, or removing any officer or director?
+- Should there be a prohibition on requiring members to pledge loyalty, deference, or allegiance to any foreign government or political party as a condition of membership?
+- Should the By-Laws prohibit officers and directors from disclosing member names, contact information, professional affiliations, or organizational activities to any foreign government, embassy, consulate, or institution — except as required by U.S. law?
+
+> **Your answer:**
+>
+>
+>
+>
+
+---
+
+### Q14.5 — Financial Independence and Response Protocol
+
+An organization that accepts funding from a foreign government source may be required to register under the Foreign Agents Registration Act (FARA). The By-Laws should address this risk and provide a clear protocol for handling foreign influence attempts.
+
+**Your response should address:**
+- Should the By-Laws prohibit accepting funds from any source whose contribution would require FARA registration or condition the funds on the organization acting at a foreign entity's direction?
+- Should the Board be required to obtain legal counsel review before accepting any significant contribution from a foreign government-affiliated source?
+- Should the By-Laws require any officer or director who receives a communication purporting to direct or influence the organization's governance to promptly notify the Board, and should the Board be required to consult legal counsel about any resulting U.S. reporting obligations?
+- How should the organization balance genuine SCUT-related academic or cultural cooperation (which is legitimate) against cooperation that could create foreign government dependency or FARA liability?
+
+> **Your answer:**
+>
+>
+>
+>
+
+---
+
 ## Summary: Your Top Priorities
 
 Once you have worked through the sections above, please take a few minutes to step back and share your overall perspective.
@@ -1023,4 +1119,4 @@ If you have any questions about the questionnaire or the revision process, pleas
 
 ---
 
-*This questionnaire was prepared by the By-Laws Revision Drafting Committee. It covers all 13 policy topic areas identified during the pre-drafting research phase. All questions reflect genuine governance choices — there are no predetermined answers.*
+*This questionnaire was prepared by the By-Laws Revision Drafting Committee. It covers all 14 policy topic areas identified during the pre-drafting research phase. All questions reflect genuine governance choices — there are no predetermined answers.*
