@@ -302,6 +302,7 @@ function renderQuestionnaire() {
   buildToc();
   updateProgress();
   restoreState();
+  updateDownloadBtn();
   initIntersectionObserver();
 }
 
