@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCUT Alumni By-Laws Questionnaire | 章程修订问卷</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1a3a6b;
+      --primary-light: #2a5298;
+      --accent: #c8102e;
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --border: #d1d9e6;
+      --text: #1a1a2e;
+      --text-muted: #5a6a8a;
+      --section-bg: #eef2f9;
+      --zh-bg: #fdf6ec;
+      --zh-border: #e8c97a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                   "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    header .sub { font-size: 1.05rem; opacity: 0.85; }
+    header .org { font-size: 0.9rem; opacity: 0.7; margin-top: 6px; }
+
+    .lang-bar {
+      background: var(--primary-light);
+      padding: 8px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .lang-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: white;
+      padding: 4px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,0.35); }
+
+    .top-bar {
+      max-width: 860px;
+      margin: 16px auto 0;
+      padding: 0 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .respondent-box {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .respondent-box label { font-size: 0.85rem; white-space: nowrap; color: var(--text-muted); }
+    .respondent-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 0.9rem;
+      background: transparent;
+    }
+
+    .progress-bar-wrap {
+      max-width: 860px;
+      margin: 10px auto 0;
+      padding: 0 16px;
+    }
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+    .progress-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; text-align: right; }
+
+    main {
+      max-width: 860px;
+      margin: 16px auto 80px;
+      padding: 0 16px;
+    }
+
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .section-header {
+      background: var(--section-bg);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .section-header .sec-num {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
+    .section-desc-zh {
+      font-size: 0.82rem;
+      color: #8a7030;
+      margin-top: 3px;
+      font-style: italic;
+    }
+
+    .question-block {
+      padding: 20px 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .question-block:last-child { border-bottom: none; padding-bottom: 20px; }
+
+    .q-id {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .q-title-en { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .q-title-zh { font-size: 0.95rem; font-weight: 600; color: #6b4c00; margin-top: 2px; }
+
+    .q-context-en {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      margin: 8px 0 0;
+      padding: 8px 12px;
+      background: #f0f4ff;
+      border-left: 3px solid var(--primary-light);
+      border-radius: 0 6px 6px 0;
+    }
+    .q-context-zh {
+      font-size: 0.84rem;
+      color: #7a5c00;
+      margin: 6px 0 0;
+      padding: 8px 12px;
+      background: var(--zh-bg);
+      border-left: 3px solid var(--zh-border);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .prompts { margin: 10px 0 0; }
+    .prompt-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .prompts ul { padding-left: 18px; }
+    .prompts-en ul li {
+      font-size: 0.83rem;
+      color: #3a4a6a;
+      margin-bottom: 3px;
+    }
+    .prompts-zh ul li {
+      font-size: 0.8rem;
+      color: #7a5c00;
+      margin-bottom: 3px;
+    }
+
+    .answer-area {
+      margin: 12px 0 20px;
+    }
+    .answer-area label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .answer-area textarea {
+      width: 100%;
+      min-height: 90px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--text);
+      resize: vertical;
+      transition: border-color 0.2s;
+      background: #fafbff;
+    }
+    .answer-area textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      background: white;
+    }
+    .answer-area textarea.has-content {
+      border-color: #4caf50;
+      background: #f8fff8;
+    }
+
+    /* Language visibility */
+    body.lang-en .zh-only { display: none; }
+    body.lang-zh .en-only { display: none; }
+
+    /* Summary section */
+    .summary-card {
+      background: var(--card);
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .summary-header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 20px;
+    }
+    .summary-header h2 { font-size: 1.1rem; font-weight: 700; }
+
+    .sticky-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    }
+
+    .btn {
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-secondary:hover { background: var(--section-bg); }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed;
+      bottom: 80px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #2a5298;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body class="lang-both">
+
+<header>
+  <h1 class="en-only">By-Laws Revision — Board Member Policy Questionnaire</h1>
+  <div class="sub zh-only">章程修订——理事会政策问卷</div>
+  <div class="sub en-only zh-only" style="margin-top:4px;font-size:0.95rem;opacity:0.75">
+    <span class="en-only">South China University of Technology Alumni, America</span>
+    <span class="zh-only">华南理工大学美国校友会</span>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('both')">EN + 中文</button>
+  <button class="lang-btn" onclick="setLang('en')">English Only</button>
+  <button class="lang-btn" onclick="setLang('zh')">仅中文</button>
+</div>
+
+<div class="top-bar">
+  <div class="respondent-box">
+    <label for="respondent-name">Name / 姓名 (optional):</label>
+    <input type="text" id="respondent-name" placeholder="Anonymous" />
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="progress-label">0 of 0 questions answered</div>
+</div>
+
+<main id="main-content">
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading questionnaire… / 加载问卷中…</p>
+  </div>
+</main>
+
+<div class="sticky-footer">
+  <button class="btn btn-secondary" onclick="clearAll()">Clear All / 清空</button>
+  <button class="btn btn-primary" onclick="downloadAnswers()">Download Answers / 下载答卷</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let questData = null;
+  const answers = {};
+
+  // Language control
+  function setLang(mode) {
+    document.body.className = 'lang-' + mode;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const idx = ['both','en','zh'].indexOf(mode);
+    document.querySelectorAll('.lang-btn')[idx].classList.add('active');
+  }
+
+  // Load YAML
+  async function loadQuestionnaire() {
+    try {
+      const resp = await fetch('questions.yaml');
+      if (!resp.ok) throw new Error('Failed to fetch questions.yaml');
+      const text = await resp.text();
+      questData = jsyaml.load(text);
+      renderQuestionnaire();
+    } catch(e) {
+      document.getElementById('main-content').innerHTML =
+        `<div class="loading" style="color:#c8102e">
+          <p>Error loading questionnaire: ${e.message}</p>
+          <p style="margin-top:8px;font-size:0.85rem">Make sure questions.yaml is in the same directory.</p>
+        </div>`;
+    }
+  }
+
+  function renderQuestionnaire() {
+    const main = document.getElementById('main-content');
+    main.innerHTML = '';
+
+    // Sections
+    for (const section of questData.sections) {
+      main.appendChild(renderSection(section));
+    }
+
+    // Summary
+    const sum = questData.summary;
+    const sumCard = document.createElement('div');
+    sumCard.className = 'summary-card';
+    sumCard.innerHTML = `
+      <div class="summary-header">
+        <h2>
+          <span class="en-only">${sum.title.en}</span>
+          <span class="zh-only">${sum.title.zh}</span>
+        </h2>
+        <div class="section-desc en-only">${sum.description.en}</div>
+        <div class="section-desc-zh zh-only">${sum.description.zh}</div>
+      </div>`;
+    for (const q of sum.questions) {
+      sumCard.appendChild(renderQuestion(q, 'S'));
+    }
+    main.appendChild(sumCard);
+
+    updateProgress();
+  }
+
+  function renderSection(section) {
+    const card = document.createElement('div');
+    card.className = 'section-card';
+
+    const hasDesc = section.description && (section.description.en || section.description.zh);
+    card.innerHTML = `
+      <div class="section-header">
+        <h2>
+          <span class="sec-num">${section.id}</span>
+          <span class="en-only">${section.title.en}</span>
+          <span class="zh-only">${section.title.zh}</span>
+        </h2>
+        ${hasDesc ? `
+          <div class="section-desc en-only">${section.description.en || ''}</div>
+          <div class="section-desc-zh zh-only">${section.description.zh || ''}</div>` : ''}
+      </div>`;
+
+    for (const q of section.questions) {
+      card.appendChild(renderQuestion(q, section.id));
+    }
+    return card;
+  }
+
+  function renderQuestion(q, sectionId) {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+
+    const hasContext = q.context && (q.context.en || q.context.zh);
+    const hasPromptsEn = q.prompts && q.prompts.en && q.prompts.en.length > 0;
+    const hasPromptsZh = q.prompts && q.prompts.zh && q.prompts.zh.length > 0;
+
+    const liEn = hasPromptsEn ? q.prompts.en.map(p => `<li>${p}</li>`).join('') : '';
+    const liZh = hasPromptsZh ? q.prompts.zh.map(p => `<li>${p}</li>`).join('') : '';
+
+    block.innerHTML = `
+      <span class="q-id">${q.id}</span>
+      <div class="q-title-en en-only">${q.title.en}</div>
+      <div class="q-title-zh zh-only">${q.title.zh}</div>
+      ${hasContext && q.context.en ? `<div class="q-context-en en-only">${q.context.en}</div>` : ''}
+      ${hasContext && q.context.zh ? `<div class="q-context-zh zh-only">${q.context.zh}</div>` : ''}
+      ${hasPromptsEn ? `
+        <div class="prompts prompts-en en-only">
+          <div class="prompt-label">Your response should address:</div>
+          <ul>${liEn}</ul>
+        </div>` : ''}
+      ${hasPromptsZh ? `
+        <div class="prompts prompts-zh zh-only">
+          <div class="prompt-label">您的回答应涵盖：</div>
+          <ul>${liZh}</ul>
+        </div>` : ''}
+      <div class="answer-area">
+        <label>Your Answer / 您的回答:</label>
+        <textarea
+          id="ans-${q.id}"
+          data-qid="${q.id}"
+          placeholder="Enter your answer here (you may write in English or Chinese) / 请在此填写您的回答（中英文均可）"
+          oninput="onAnswerChange(this)"
+        ></textarea>
+      </div>`;
+    return block;
+  }
+
+  function onAnswerChange(textarea) {
+    const qid = textarea.dataset.qid;
+    const val = textarea.value.trim();
+    if (val) {
+      answers[qid] = val;
+      textarea.classList.add('has-content');
+    } else {
+      delete answers[qid];
+      textarea.classList.remove('has-content');
+    }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    let total = 0, answered = 0;
+    document.querySelectorAll('textarea[data-qid]').forEach(t => {
+      total++;
+      if (t.value.trim()) answered++;
+    });
+    const pct = total > 0 ? Math.round(answered / total * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent =
+      `${answered} of ${total} questions answered / 已回答 ${answered}/${total} 题`;
+  }
+
+  function clearAll() {
+    if (!confirm('Clear all answers? / 确认清空所有回答？')) return;
+    document.querySelectorAll('textarea[data-qid]').forEach(t => {
+      t.value = '';
+      t.classList.remove('has-content');
+    });
+    Object.keys(answers).forEach(k => delete answers[k]);
+    updateProgress();
+  }
+
+  function downloadAnswers() {
+    if (Object.keys(answers).length === 0) {
+      showToast('Please answer at least one question. / 请至少填写一道题。');
+      return;
+    }
+
+    const respondent = document.getElementById('respondent-name').value.trim() || 'Anonymous';
+    const now = new Date().toISOString();
+
+    // Build answer object
+    const output = {
+      meta: {
+        respondent: respondent,
+        timestamp: now,
+        questionnaire: questData.meta.title.en
+      },
+      answers: {}
+    };
+
+    // Collect all question IDs in order
+    for (const section of questData.sections) {
+      for (const q of section.questions) {
+        if (answers[q.id] !== undefined) {
+          output.answers[q.id] = answers[q.id];
+        }
+      }
+    }
+    for (const q of questData.summary.questions) {
+      if (answers[q.id] !== undefined) {
+        output.answers[q.id] = answers[q.id];
+      }
+    }
+
+    const yamlStr = jsyaml.dump(output, { lineWidth: 100, indent: 2 });
+    const blob = new Blob([yamlStr], { type: 'text/yaml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const safeName = respondent.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_').substring(0, 30);
+    const dateStr = now.substring(0, 10);
+    a.download = `answers_${safeName}_${dateStr}.yaml`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Download started! / 下载已开始！');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  loadQuestionnaire();
+</script>
+</body>
+</html>
