@@ -732,7 +732,15 @@
           .map(({ data }) => ({
             respondent: data?.meta?.respondent || 'Anonymous',
             timestamp: data?.meta?.timestamp || '',
-            text: data.answers[q.id]
+            text: data.answers[q.id],
+            skipped: false
+          }));
+
+        const qSkipped = loadedAnswers
+          .filter(({ data }) => Array.isArray(data?.skipped) && data.skipped.includes(q.id))
+          .map(({ data }) => ({
+            respondent: data?.meta?.respondent || 'Anonymous',
+            timestamp: data?.meta?.timestamp || ''
           }));
 
         const qBlock = document.createElement('div');
@@ -750,6 +758,18 @@
         const hasContextEn = q.context?.en && q.context.en.trim();
         const hasContextZh = q.context?.zh && q.context.zh.trim();
 
+        const skippedHtml = qSkipped.length > 0
+          ? qSkipped.map(a => `
+              <div class="answer-card" style="border-color:#e8c97a;background:#fffbf0">
+                <div class="answer-card-header" style="background:#fff3cd">
+                  <span class="respondent-name" style="color:#b8860b">${escHtml(a.respondent)}</span>
+                  <span style="font-size:0.72rem;color:#b8860b;font-style:italic">
+                    <span class="en-only">Skipped</span><span class="zh-only">已跳过</span>
+                  </span>
+                </div>
+              </div>`).join('')
+          : '';
+
         qBlock.innerHTML = `
           <div class="question-header">
             <div>
@@ -766,21 +786,25 @@
                 <span class="en-only">answered</span>
                 <span class="zh-only">人作答</span>
               </span>
-              ${qAnswers.length === 0 ? `<span class="not-answered-badge en-only">No answers yet</span>
-                <span class="not-answered-badge zh-only">暂无回答</span>` : ''}
+              ${qSkipped.length > 0 ? `<span class="answered-badge" style="background:#fff3cd;color:#b8860b">
+                ${qSkipped.length} <span class="en-only">skipped</span><span class="zh-only">跳过</span>
+              </span>` : ''}
+              ${qAnswers.length === 0 && qSkipped.length === 0
+                ? `<span class="not-answered-badge en-only">No answers yet</span>
+                   <span class="not-answered-badge zh-only">暂无回答</span>` : ''}
             </div>
-            ${qAnswers.length > 0
-              ? qAnswers.map(a => `
-                  <div class="answer-card">
-                    <div class="answer-card-header">
-                      <span class="respondent-name">${escHtml(a.respondent)}</span>
-                      ${a.timestamp ? `<span class="answer-date">${new Date(a.timestamp).toLocaleDateString()}</span>` : ''}
-                    </div>
-                    <div class="answer-text">${escHtml(a.text)}</div>
-                  </div>`).join('')
-              : `<div class="no-answer en-only">No one answered this question yet.</div>
-                 <div class="no-answer zh-only">暂无人回答此题。</div>`
-            }
+            ${qAnswers.map(a => `
+                <div class="answer-card">
+                  <div class="answer-card-header">
+                    <span class="respondent-name">${escHtml(a.respondent)}</span>
+                    ${a.timestamp ? `<span class="answer-date">${new Date(a.timestamp).toLocaleDateString()}</span>` : ''}
+                  </div>
+                  <div class="answer-text">${escHtml(a.text)}</div>
+                </div>`).join('')}
+            ${skippedHtml}
+            ${qAnswers.length === 0 && qSkipped.length === 0
+              ? `<div class="no-answer en-only">No one answered this question yet.</div>
+                 <div class="no-answer zh-only">暂无人回答此题。</div>` : ''}
           </div>`;
 
         body.appendChild(qBlock);

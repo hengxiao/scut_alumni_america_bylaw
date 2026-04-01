@@ -20,6 +20,13 @@
       --section-bg: #eef2f9;
       --zh-bg: #fdf6ec;
       --zh-border: #e8c97a;
+      --green: #2e7d32;
+      --green-bg: #f1f8f1;
+      --yellow: #b8860b;
+      --yellow-bg: #fffbf0;
+      --red: #c62828;
+      --red-bg: #fff5f5;
+      --toc-width: 240px;
     }
 
     body {
@@ -30,19 +37,23 @@
       line-height: 1.6;
     }
 
+    /* ── Language visibility ───────────────────────────────────────────────── */
+    body.lang-en .zh-only { display: none; }
+    body.lang-zh .en-only { display: none; }
+
+    /* ── Static header ─────────────────────────────────────────────────────── */
     header {
       background: var(--primary);
       color: white;
-      padding: 24px 20px;
+      padding: 20px 20px 16px;
       text-align: center;
     }
-    header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
-    header .sub { font-size: 1.05rem; opacity: 0.85; }
-    header .org { font-size: 0.9rem; opacity: 0.7; margin-top: 6px; }
+    header h1 { font-size: 1.35rem; font-weight: 700; line-height: 1.3; }
+    header .sub { font-size: 0.88rem; opacity: 0.75; margin-top: 4px; }
 
     .lang-bar {
       background: var(--primary-light);
-      padding: 8px 20px;
+      padding: 7px 20px;
       display: flex;
       justify-content: center;
       gap: 8px;
@@ -51,68 +62,261 @@
       background: rgba(255,255,255,0.15);
       border: 1px solid rgba(255,255,255,0.4);
       color: white;
-      padding: 4px 16px;
+      padding: 3px 14px;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       transition: background 0.2s;
     }
     .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,0.35); }
 
-    .top-bar {
-      max-width: 860px;
-      margin: 16px auto 0;
-      padding: 0 16px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .respondent-box {
-      flex: 1;
-      min-width: 200px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    /* ── Mobile sticky topbar ──────────────────────────────────────────────── */
+    .mobile-topbar {
+      display: none; /* shown via media query */
+      position: sticky;
+      top: 0;
+      z-index: 400;
+      background: var(--primary);
       padding: 8px 12px;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    .respondent-box label { font-size: 0.85rem; white-space: nowrap; color: var(--text-muted); }
-    .respondent-box input {
-      border: none;
-      outline: none;
-      flex: 1;
-      font-size: 0.9rem;
-      background: transparent;
+    .hamburger-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mob-prog-wrap { flex: 1; }
+    .mob-prog-track {
+      height: 5px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .mob-prog-fill {
+      height: 100%;
+      background: #4caf50;
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+    .mob-prog-label {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.75);
+      margin-top: 2px;
+      text-align: right;
     }
 
-    .progress-bar-wrap {
-      max-width: 860px;
-      margin: 10px auto 0;
-      padding: 0 16px;
+    /* ── Page layout ───────────────────────────────────────────────────────── */
+    .page-layout {
+      display: flex;
+      align-items: flex-start;
     }
-    .progress-track {
+
+    /* ── TOC Sidebar ───────────────────────────────────────────────────────── */
+    .toc-sidebar {
+      width: var(--toc-width);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+    }
+
+    .toc-top {
+      flex-shrink: 0;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--section-bg);
+    }
+    .toc-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .toc-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+    }
+    .toc-close-btn {
+      display: none; /* mobile only */
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .toc-progress-track {
       height: 6px;
       background: var(--border);
       border-radius: 3px;
       overflow: hidden;
+      margin-bottom: 4px;
     }
-    .progress-fill {
+    .toc-progress-fill {
       height: 100%;
-      background: var(--accent);
+      background: #4caf50;
       border-radius: 3px;
       transition: width 0.4s;
     }
-    .progress-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; text-align: right; }
-
-    main {
-      max-width: 860px;
-      margin: 16px auto 80px;
-      padding: 0 16px;
+    .toc-progress-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
     }
 
+    .toc-legend {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .toc-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+    .toc-dot-sample {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .toc-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0 80px;
+      scroll-behavior: smooth;
+    }
+
+    .toc-section-label {
+      padding: 8px 14px 3px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary-light);
+      border-top: 1px solid #edf0f7;
+      margin-top: 4px;
+    }
+    .toc-section-label:first-child { border-top: none; margin-top: 0; }
+
+    .toc-q-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .toc-q-item:hover { background: var(--section-bg); }
+    .toc-q-item.is-active {
+      background: #dce8ff;
+    }
+    .toc-q-item.is-active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--primary);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .toc-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    /* Default = red (unanswered) */
+    .toc-q-item .toc-dot { background: #e57373; }
+    .toc-q-item.state-answered .toc-dot { background: #4caf50; }
+    .toc-q-item.state-skipped .toc-dot { background: #f5a623; }
+
+    .toc-qid {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .toc-q-item.is-active .toc-qid { color: var(--primary); font-weight: 700; }
+    .toc-q-item.state-answered .toc-qid { color: var(--green); }
+    .toc-q-item.state-skipped .toc-qid { color: var(--yellow); }
+    .toc-q-item.state-unanswered .toc-qid { color: var(--red); }
+
+    /* ── TOC Overlay (mobile backdrop) ────────────────────────────────────── */
+    .toc-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 300;
+    }
+    .toc-overlay.show { display: block; }
+
+    /* ── Content area ─────────────────────────────────────────────────────── */
+    .content-wrap {
+      flex: 1;
+      min-width: 0;
+      padding: 16px 20px 100px;
+      max-width: 760px;
+    }
+
+    /* ── Respondent name box ──────────────────────────────────────────────── */
+    .respondent-wrap { margin-bottom: 16px; }
+    .respondent-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      transition: border-color 0.2s;
+    }
+    .respondent-box.error { border-color: var(--red); background: var(--red-bg); }
+    .respondent-box label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--text-muted);
+    }
+    .required-star { color: var(--accent); margin-left: 2px; }
+    .respondent-box input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 0.95rem;
+      background: transparent;
+      min-width: 0;
+    }
+    .name-error {
+      font-size: 0.78rem;
+      color: var(--red);
+      margin-top: 4px;
+      padding-left: 4px;
+    }
+
+    /* ── Section cards ────────────────────────────────────────────────────── */
     .section-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -120,49 +324,38 @@
       margin-bottom: 24px;
       overflow: hidden;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      scroll-margin-top: 12px;
     }
-
     .section-header {
       background: var(--section-bg);
-      padding: 16px 20px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
     }
-    .section-header h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .section-header .sec-num {
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; color: var(--primary); }
+    .sec-num {
       display: inline-block;
       background: var(--primary);
       color: white;
       border-radius: 50%;
-      width: 26px;
-      height: 26px;
-      line-height: 26px;
+      width: 24px; height: 24px;
+      line-height: 24px;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       margin-right: 8px;
     }
-    .section-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      font-style: italic;
-    }
-    .section-desc-zh {
-      font-size: 0.82rem;
-      color: #8a7030;
-      margin-top: 3px;
-      font-style: italic;
-    }
+    .section-desc { font-size: 0.83rem; color: var(--text-muted); margin-top: 5px; font-style: italic; }
+    .section-desc-zh { font-size: 0.8rem; color: #8a7030; margin-top: 3px; font-style: italic; }
 
+    /* ── Question block ───────────────────────────────────────────────────── */
     .question-block {
-      padding: 20px 20px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 20px 0;
+      border-bottom: 1px solid #edf0f7;
+      scroll-margin-top: 12px;
+      transition: background 0.2s;
     }
-    .question-block:last-child { border-bottom: none; padding-bottom: 20px; }
+    .question-block:last-child { border-bottom: none; padding-bottom: 18px; }
+    .question-block.is-skipped { background: var(--yellow-bg); }
 
     .q-id {
       display: inline-block;
@@ -170,178 +363,186 @@
       color: white;
       padding: 2px 8px;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-
-    .q-title-en { font-size: 1rem; font-weight: 700; color: var(--text); }
-    .q-title-zh { font-size: 0.95rem; font-weight: 600; color: #6b4c00; margin-top: 2px; }
+    .q-title-en { font-size: 0.97rem; font-weight: 700; }
+    .q-title-zh { font-size: 0.92rem; font-weight: 600; color: #6b4c00; margin-top: 2px; }
 
     .q-context-en {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      margin: 8px 0 0;
-      padding: 8px 12px;
-      background: #f0f4ff;
-      border-left: 3px solid var(--primary-light);
+      font-size: 0.85rem; color: var(--text-muted);
+      margin: 8px 0 0; padding: 7px 12px;
+      background: #f0f4ff; border-left: 3px solid var(--primary-light);
       border-radius: 0 6px 6px 0;
     }
     .q-context-zh {
-      font-size: 0.84rem;
-      color: #7a5c00;
-      margin: 6px 0 0;
-      padding: 8px 12px;
-      background: var(--zh-bg);
-      border-left: 3px solid var(--zh-border);
+      font-size: 0.82rem; color: #7a5c00;
+      margin: 5px 0 0; padding: 7px 12px;
+      background: var(--zh-bg); border-left: 3px solid var(--zh-border);
       border-radius: 0 6px 6px 0;
     }
 
-    .prompts { margin: 10px 0 0; }
+    .prompts { margin: 8px 0 0; }
     .prompt-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
+      font-size: 0.73rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px;
     }
     .prompts ul { padding-left: 18px; }
-    .prompts-en ul li {
-      font-size: 0.83rem;
-      color: #3a4a6a;
-      margin-bottom: 3px;
+    .prompts-en ul li { font-size: 0.81rem; color: #3a4a6a; margin-bottom: 2px; }
+    .prompts-zh ul li { font-size: 0.78rem; color: #7a5c00; margin-bottom: 2px; }
+
+    /* ── Skip checkbox ────────────────────────────────────────────────────── */
+    .skip-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0 4px;
     }
-    .prompts-zh ul li {
-      font-size: 0.8rem;
-      color: #7a5c00;
-      margin-bottom: 3px;
+    .skip-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      user-select: none;
+      padding: 3px 10px 3px 6px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: white;
+      transition: all 0.2s;
+    }
+    .skip-checkbox-label:hover { border-color: var(--yellow); color: var(--yellow); }
+    .skip-checkbox-label input[type="checkbox"] { accent-color: var(--yellow); }
+    .is-skipped .skip-checkbox-label {
+      border-color: var(--yellow);
+      background: #fff3cd;
+      color: var(--yellow);
+      font-weight: 600;
     }
 
-    .answer-area {
-      margin: 12px 0 20px;
-    }
+    /* ── Answer textarea ──────────────────────────────────────────────────── */
+    .answer-area { margin: 8px 0 18px; }
     .answer-area label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 4px;
+      display: block; font-size: 0.75rem; font-weight: 700;
+      color: var(--primary); margin-bottom: 4px;
     }
     .answer-area textarea {
-      width: 100%;
-      min-height: 90px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      color: var(--text);
-      resize: vertical;
-      transition: border-color 0.2s;
+      width: 100%; min-height: 88px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 9px 12px; font-size: 0.9rem; font-family: inherit;
+      color: var(--text); resize: vertical; transition: border-color 0.2s;
       background: #fafbff;
     }
-    .answer-area textarea:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      background: white;
-    }
-    .answer-area textarea.has-content {
-      border-color: #4caf50;
-      background: #f8fff8;
+    .answer-area textarea:focus { outline: none; border-color: var(--primary-light); background: white; }
+    .answer-area textarea.has-content { border-color: #4caf50; background: var(--green-bg); }
+    .answer-area textarea:disabled {
+      opacity: 0.4; cursor: not-allowed; resize: none;
+      border-style: dashed; background: #fafafa;
     }
 
-    /* Language visibility */
-    body.lang-en .zh-only { display: none; }
-    body.lang-zh .en-only { display: none; }
-
-    /* Summary section */
+    /* ── Summary card ─────────────────────────────────────────────────────── */
     .summary-card {
       background: var(--card);
       border: 2px solid var(--primary);
       border-radius: 12px;
       margin-bottom: 24px;
       overflow: hidden;
+      scroll-margin-top: 12px;
     }
-    .summary-header {
-      background: var(--primary);
-      color: white;
-      padding: 16px 20px;
-    }
-    .summary-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .summary-header { background: var(--primary); color: white; padding: 14px 20px; }
+    .summary-header h2 { font-size: 1.05rem; font-weight: 700; }
 
+    /* ── Sticky footer ────────────────────────────────────────────────────── */
     .sticky-footer {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       background: white;
       border-top: 1px solid var(--border);
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
       justify-content: center;
       gap: 12px;
-      z-index: 100;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+      z-index: 500;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
     }
-
     .btn {
-      padding: 10px 28px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
+      padding: 9px 26px; border-radius: 8px;
+      font-size: 0.92rem; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
+    .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-light); }
-    .btn-secondary {
-      background: white;
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
+    .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
     .btn-secondary:hover { background: var(--section-bg); }
 
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
+    /* ── Loading ──────────────────────────────────────────────────────────── */
+    .loading { text-align: center; padding: 60px 20px; color: var(--text-muted); }
     .loading-spinner {
-      width: 40px; height: 40px;
+      width: 38px; height: 38px;
       border: 4px solid var(--border);
       border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
+      margin: 0 auto 14px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Toast ────────────────────────────────────────────────────────────── */
     .toast {
       position: fixed;
-      bottom: 80px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #2a5298;
-      color: white;
-      padding: 10px 24px;
-      border-radius: 24px;
-      font-size: 0.9rem;
-      opacity: 0;
-      transition: all 0.3s;
-      pointer-events: none;
-      z-index: 200;
+      bottom: 72px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--primary);
+      color: white; padding: 9px 22px; border-radius: 24px;
+      font-size: 0.87rem; opacity: 0; transition: all 0.3s;
+      pointer-events: none; z-index: 600;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Mobile ───────────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .mobile-topbar { display: flex; }
+
+      .toc-sidebar {
+        position: fixed;
+        top: 0; left: -270px;
+        width: 270px;
+        height: 100%;
+        z-index: 350;
+        transition: left 0.28s ease;
+        box-shadow: 2px 0 20px rgba(0,0,0,0.18);
+      }
+      .toc-sidebar.toc-open { left: 0; }
+      .toc-close-btn { display: block; }
+
+      .content-wrap { padding: 12px 14px 100px; }
+
+      /* Push content from under mobile topbar on scroll */
+      .section-card, .summary-card { scroll-margin-top: 56px; }
+      .question-block { scroll-margin-top: 56px; }
+    }
   </style>
 </head>
 <body class="lang-both">
 
+<!-- ── Mobile sticky topbar ──────────────────────────────────────────────── -->
+<div class="mobile-topbar" id="mobile-topbar">
+  <button class="hamburger-btn" onclick="toggleToc()" aria-label="Open table of contents">☰</button>
+  <div class="mob-prog-wrap">
+    <div class="mob-prog-track"><div class="mob-prog-fill" id="mob-prog-fill" style="width:0%"></div></div>
+    <div class="mob-prog-label" id="mob-prog-label">0 / 0</div>
+  </div>
+</div>
+
+<!-- ── Static header ─────────────────────────────────────────────────────── -->
 <header>
-  <h1 class="en-only">By-Laws Revision — Board Member Policy Questionnaire</h1>
-  <div class="sub zh-only">章程修订——理事会政策问卷</div>
-  <div class="sub en-only zh-only" style="margin-top:4px;font-size:0.95rem;opacity:0.75">
+  <h1>
+    <span class="en-only">By-Laws Revision — Board Member Policy Questionnaire</span>
+    <span class="zh-only">章程修订——理事会政策问卷</span>
+  </h1>
+  <div class="sub">
     <span class="en-only">South China University of Technology Alumni, America</span>
     <span class="zh-only">华南理工大学美国校友会</span>
   </div>
@@ -353,51 +554,126 @@
   <button class="lang-btn" onclick="setLang('zh')">仅中文</button>
 </div>
 
-<div class="top-bar">
-  <div class="respondent-box">
-    <label for="respondent-name">Name / 姓名 (optional):</label>
-    <input type="text" id="respondent-name" placeholder="Anonymous" />
+<!-- ── Page layout ───────────────────────────────────────────────────────── -->
+<div class="page-layout">
+
+  <!-- TOC Overlay (mobile backdrop) -->
+  <div class="toc-overlay" id="toc-overlay" onclick="toggleToc()"></div>
+
+  <!-- TOC Sidebar -->
+  <nav class="toc-sidebar" id="toc-sidebar" aria-label="Table of contents">
+    <div class="toc-top">
+      <div class="toc-title-row">
+        <span class="toc-title">Contents / 目录</span>
+        <button class="toc-close-btn" onclick="toggleToc()" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Progress bar inside TOC top -->
+      <div class="toc-progress-track">
+        <div class="toc-progress-fill" id="toc-prog-fill" style="width:0%"></div>
+      </div>
+      <div class="toc-progress-label" id="toc-prog-label">0 / 0 answered</div>
+
+      <!-- Legend -->
+      <div class="toc-legend">
+        <div class="toc-legend-item">
+          <div class="toc-dot-sample" style="background:#4caf50"></div>
+          <span class="en-only">Answered</span><span class="zh-only">已回答</span>
+        </div>
+        <div class="toc-legend-item">
+          <div class="toc-dot-sample" style="background:#f5a623"></div>
+          <span class="en-only">Skipped</span><span class="zh-only">已跳过</span>
+        </div>
+        <div class="toc-legend-item">
+          <div class="toc-dot-sample" style="background:#e57373"></div>
+          <span class="en-only">Remaining</span><span class="zh-only">待回答</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-list" id="toc-list">
+      <!-- Populated by JS -->
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content-wrap">
+
+    <!-- Respondent name (mandatory) -->
+    <div class="respondent-wrap">
+      <div class="respondent-box" id="respondent-box">
+        <label for="respondent-name">
+          <span class="en-only">Your Name</span>
+          <span class="zh-only">您的姓名</span>
+          <span class="required-star">*</span>
+        </label>
+        <input type="text" id="respondent-name"
+               placeholder="Required before download / 下载前必填"
+               oninput="clearNameError()" />
+      </div>
+      <div class="name-error" id="name-error" style="display:none">
+        <span class="en-only">Please enter your name before downloading.</span>
+        <span class="zh-only">下载前请填写您的姓名。</span>
+      </div>
+    </div>
+
+    <main id="main-content">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Loading questionnaire… / 加载问卷中…</p>
+      </div>
+    </main>
   </div>
 </div>
 
-<div class="progress-bar-wrap">
-  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-  <div class="progress-label" id="progress-label">0 of 0 questions answered</div>
-</div>
-
-<main id="main-content">
-  <div class="loading">
-    <div class="loading-spinner"></div>
-    <p>Loading questionnaire… / 加载问卷中…</p>
-  </div>
-</main>
-
+<!-- Sticky footer -->
 <div class="sticky-footer">
-  <button class="btn btn-secondary" onclick="clearAll()">Clear All / 清空</button>
-  <button class="btn btn-primary" onclick="downloadAnswers()">Download Answers / 下载答卷</button>
+  <button class="btn btn-secondary" onclick="clearAll()">
+    <span class="en-only">Clear All</span>
+    <span class="zh-only">清空</span>
+  </button>
+  <button class="btn btn-primary" onclick="downloadAnswers()">
+    <span class="en-only">Download Answers</span>
+    <span class="zh-only">下载答卷</span>
+  </button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── State ──────────────────────────────────────────────────────────────────
   let questData = null;
-  const answers = {};
+  const answers = {};         // qid → text
+  const skipped = new Set();  // skipped qids
+  let currentLang = 'both';
+  let tocIsOpen = false;
 
-  // Language control
+  // ── Language ───────────────────────────────────────────────────────────────
   function setLang(mode) {
-    document.body.className = 'lang-' + mode;
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const idx = ['both','en','zh'].indexOf(mode);
-    document.querySelectorAll('.lang-btn')[idx].classList.add('active');
+    currentLang = mode;
+    applyBodyClass();
+    document.querySelectorAll('.lang-btn').forEach((b, i) =>
+      b.classList.toggle('active', ['both','en','zh'][i] === mode)
+    );
   }
 
-  // Load YAML
+  function applyBodyClass() {
+    document.body.className = 'lang-' + currentLang + (tocIsOpen ? ' toc-open' : '');
+  }
+
+  // ── TOC toggle (mobile) ────────────────────────────────────────────────────
+  function toggleToc() {
+    tocIsOpen = !tocIsOpen;
+    document.getElementById('toc-sidebar').classList.toggle('toc-open', tocIsOpen);
+    document.getElementById('toc-overlay').classList.toggle('show', tocIsOpen);
+  }
+
+  // ── Load YAML ─────────────────────────────────────────────────────────────
   async function loadQuestionnaire() {
     try {
       const resp = await fetch('questions.yaml');
       if (!resp.ok) throw new Error('Failed to fetch questions.yaml');
-      const text = await resp.text();
-      questData = jsyaml.load(text);
+      questData = jsyaml.load(await resp.text());
       renderQuestionnaire();
     } catch(e) {
       document.getElementById('main-content').innerHTML =
@@ -408,19 +684,20 @@
     }
   }
 
+  // ── Render ─────────────────────────────────────────────────────────────────
   function renderQuestionnaire() {
     const main = document.getElementById('main-content');
     main.innerHTML = '';
 
-    // Sections
     for (const section of questData.sections) {
       main.appendChild(renderSection(section));
     }
 
-    // Summary
+    // Summary section
     const sum = questData.summary;
     const sumCard = document.createElement('div');
     sumCard.className = 'summary-card';
+    sumCard.id = 'section-S';
     sumCard.innerHTML = `
       <div class="summary-header">
         <h2>
@@ -430,18 +707,18 @@
         <div class="section-desc en-only">${sum.description.en}</div>
         <div class="section-desc-zh zh-only">${sum.description.zh}</div>
       </div>`;
-    for (const q of sum.questions) {
-      sumCard.appendChild(renderQuestion(q, 'S'));
-    }
+    for (const q of sum.questions) sumCard.appendChild(renderQuestion(q));
     main.appendChild(sumCard);
 
+    buildToc();
     updateProgress();
+    initIntersectionObserver();
   }
 
   function renderSection(section) {
     const card = document.createElement('div');
     card.className = 'section-card';
-
+    card.id = 'section-' + section.id;
     const hasDesc = section.description && (section.description.en || section.description.zh);
     card.innerHTML = `
       <div class="section-header">
@@ -454,21 +731,18 @@
           <div class="section-desc en-only">${section.description.en || ''}</div>
           <div class="section-desc-zh zh-only">${section.description.zh || ''}</div>` : ''}
       </div>`;
-
-    for (const q of section.questions) {
-      card.appendChild(renderQuestion(q, section.id));
-    }
+    for (const q of section.questions) card.appendChild(renderQuestion(q));
     return card;
   }
 
-  function renderQuestion(q, sectionId) {
+  function renderQuestion(q) {
     const block = document.createElement('div');
     block.className = 'question-block';
+    block.id = 'q-' + q.id;
+    block.dataset.qid = q.id;
 
-    const hasContext = q.context && (q.context.en || q.context.zh);
-    const hasPromptsEn = q.prompts && q.prompts.en && q.prompts.en.length > 0;
-    const hasPromptsZh = q.prompts && q.prompts.zh && q.prompts.zh.length > 0;
-
+    const hasPromptsEn = q.prompts?.en?.length > 0;
+    const hasPromptsZh = q.prompts?.zh?.length > 0;
     const liEn = hasPromptsEn ? q.prompts.en.map(p => `<li>${p}</li>`).join('') : '';
     const liZh = hasPromptsZh ? q.prompts.zh.map(p => `<li>${p}</li>`).join('') : '';
 
@@ -476,8 +750,8 @@
       <span class="q-id">${q.id}</span>
       <div class="q-title-en en-only">${q.title.en}</div>
       <div class="q-title-zh zh-only">${q.title.zh}</div>
-      ${hasContext && q.context.en ? `<div class="q-context-en en-only">${q.context.en}</div>` : ''}
-      ${hasContext && q.context.zh ? `<div class="q-context-zh zh-only">${q.context.zh}</div>` : ''}
+      ${q.context?.en ? `<div class="q-context-en en-only">${q.context.en}</div>` : ''}
+      ${q.context?.zh ? `<div class="q-context-zh zh-only">${q.context.zh}</div>` : ''}
       ${hasPromptsEn ? `
         <div class="prompts prompts-en en-only">
           <div class="prompt-label">Your response should address:</div>
@@ -488,18 +762,96 @@
           <div class="prompt-label">您的回答应涵盖：</div>
           <ul>${liZh}</ul>
         </div>` : ''}
+      <div class="skip-row">
+        <label class="skip-checkbox-label">
+          <input type="checkbox" data-qid="${q.id}" onchange="onSkipChange(this)" />
+          <span class="en-only">Mark as Skipped</span>
+          <span class="zh-only">跳过此题</span>
+        </label>
+      </div>
       <div class="answer-area">
-        <label>Your Answer / 您的回答:</label>
+        <label>
+          <span class="en-only">Your Answer:</span>
+          <span class="zh-only">您的回答：</span>
+        </label>
         <textarea
           id="ans-${q.id}"
           data-qid="${q.id}"
-          placeholder="Enter your answer here (you may write in English or Chinese) / 请在此填写您的回答（中英文均可）"
+          placeholder="Enter your answer (English or Chinese / 中英文均可)"
           oninput="onAnswerChange(this)"
         ></textarea>
       </div>`;
     return block;
   }
 
+  // ── Build TOC ──────────────────────────────────────────────────────────────
+  function buildToc() {
+    const list = document.getElementById('toc-list');
+    list.innerHTML = '';
+
+    const addSection = (id, titleEn, titleZh, questions) => {
+      const label = document.createElement('div');
+      label.className = 'toc-section-label';
+      label.innerHTML = `<span class="en-only">§${id} ${titleEn}</span><span class="zh-only">§${id} ${titleZh}</span>`;
+      list.appendChild(label);
+
+      for (const q of questions) {
+        const a = document.createElement('a');
+        a.className = 'toc-q-item';
+        a.dataset.qid = q.id;
+        a.href = '#q-' + q.id;
+        a.innerHTML = `<span class="toc-dot"></span><span class="toc-qid">${q.id}</span>`;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('q-' + q.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (tocIsOpen) toggleToc(); // close on mobile after click
+        });
+        list.appendChild(a);
+      }
+    };
+
+    for (const section of questData.sections) {
+      addSection(section.id, section.title.en, section.title.zh, section.questions);
+    }
+    addSection('S', questData.summary.title.en, questData.summary.title.zh, questData.summary.questions);
+  }
+
+  // ── Update a single TOC dot ────────────────────────────────────────────────
+  function updateTocItem(qid) {
+    const el = document.querySelector(`.toc-q-item[data-qid="${qid}"]`);
+    if (!el) return;
+    el.classList.remove('state-answered', 'state-skipped');
+    if (skipped.has(qid)) {
+      el.classList.add('state-skipped');
+    } else if (answers[qid]) {
+      el.classList.add('state-answered');
+    }
+    // default = red (no extra class needed; CSS covers it)
+  }
+
+  // ── Progress ───────────────────────────────────────────────────────────────
+  function updateProgress() {
+    let total = 0, answered = 0, nSkipped = 0;
+    document.querySelectorAll('textarea[data-qid]').forEach(t => {
+      total++;
+      const qid = t.dataset.qid;
+      if (skipped.has(qid)) nSkipped++;
+      else if (t.value.trim()) answered++;
+    });
+    const done = answered + nSkipped;
+    const pct = total > 0 ? Math.round(done / total * 100) : 0;
+
+    // TOC progress bar
+    document.getElementById('toc-prog-fill').style.width = pct + '%';
+    document.getElementById('toc-prog-label').textContent =
+      `${answered} answered, ${nSkipped} skipped / ${total}`;
+
+    // Mobile progress bar
+    document.getElementById('mob-prog-fill').style.width = pct + '%';
+    document.getElementById('mob-prog-label').textContent = `${done}/${total}`;
+  }
+
+  // ── Answer change ─────────────────────────────────────────────────────────
   function onAnswerChange(textarea) {
     const qid = textarea.dataset.qid;
     const val = textarea.value.trim();
@@ -510,61 +862,140 @@
       delete answers[qid];
       textarea.classList.remove('has-content');
     }
+    updateTocItem(qid);
     updateProgress();
   }
 
-  function updateProgress() {
-    let total = 0, answered = 0;
-    document.querySelectorAll('textarea[data-qid]').forEach(t => {
-      total++;
-      if (t.value.trim()) answered++;
-    });
-    const pct = total > 0 ? Math.round(answered / total * 100) : 0;
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-label').textContent =
-      `${answered} of ${total} questions answered / 已回答 ${answered}/${total} 题`;
+  // ── Skip change ───────────────────────────────────────────────────────────
+  function onSkipChange(checkbox) {
+    const qid = checkbox.dataset.qid;
+    const block = document.getElementById('q-' + qid);
+    const textarea = document.getElementById('ans-' + qid);
+
+    if (checkbox.checked) {
+      skipped.add(qid);
+      block.classList.add('is-skipped');
+      textarea.disabled = true;
+      textarea.classList.remove('has-content');
+      // Keep any existing answer text but don't count it
+    } else {
+      skipped.delete(qid);
+      block.classList.remove('is-skipped');
+      textarea.disabled = false;
+      // Re-evaluate answer state
+      if (textarea.value.trim()) {
+        answers[qid] = textarea.value.trim();
+        textarea.classList.add('has-content');
+      }
+    }
+    updateTocItem(qid);
+    updateProgress();
   }
 
+  // ── IntersectionObserver: track current question in viewport ──────────────
+  function initIntersectionObserver() {
+    const observer = new IntersectionObserver(entries => {
+      // Find the entry that is most in the middle of the screen
+      let best = null, bestDist = Infinity;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const rect = entry.boundingClientRect;
+          const mid = (rect.top + rect.bottom) / 2;
+          const viewMid = window.innerHeight / 2;
+          const dist = Math.abs(mid - viewMid);
+          if (dist < bestDist) { bestDist = dist; best = entry.target; }
+        }
+      });
+      if (best) setActiveTocItem(best.dataset.qid);
+    }, {
+      rootMargin: '-10% 0px -50% 0px',
+      threshold: 0
+    });
+
+    document.querySelectorAll('.question-block[data-qid]').forEach(el => observer.observe(el));
+  }
+
+  function setActiveTocItem(qid) {
+    document.querySelectorAll('.toc-q-item').forEach(el => el.classList.remove('is-active'));
+    const item = document.querySelector(`.toc-q-item[data-qid="${qid}"]`);
+    if (!item) return;
+    item.classList.add('is-active');
+
+    // Scroll TOC list to center this item
+    const tocList = document.getElementById('toc-list');
+    const itemMid = item.offsetTop + item.offsetHeight / 2;
+    const targetScroll = itemMid - tocList.clientHeight / 2;
+    tocList.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  }
+
+  // ── Name validation ───────────────────────────────────────────────────────
+  function clearNameError() {
+    document.getElementById('respondent-box').classList.remove('error');
+    document.getElementById('name-error').style.display = 'none';
+  }
+
+  function validateName() {
+    const name = document.getElementById('respondent-name').value.trim();
+    if (!name) {
+      document.getElementById('respondent-box').classList.add('error');
+      document.getElementById('name-error').style.display = 'block';
+      document.getElementById('respondent-name').focus();
+      return false;
+    }
+    clearNameError();
+    return true;
+  }
+
+  // ── Clear all ─────────────────────────────────────────────────────────────
   function clearAll() {
-    if (!confirm('Clear all answers? / 确认清空所有回答？')) return;
+    if (!confirm('Clear all answers and skips? / 确认清空所有回答和跳过标记？')) return;
     document.querySelectorAll('textarea[data-qid]').forEach(t => {
-      t.value = '';
-      t.classList.remove('has-content');
+      t.value = ''; t.classList.remove('has-content'); t.disabled = false;
+    });
+    document.querySelectorAll('input[type="checkbox"][data-qid]').forEach(c => {
+      c.checked = false;
+      document.getElementById('q-' + c.dataset.qid)?.classList.remove('is-skipped');
     });
     Object.keys(answers).forEach(k => delete answers[k]);
+    skipped.clear();
+    document.querySelectorAll('.toc-q-item').forEach(el =>
+      el.classList.remove('state-answered', 'state-skipped')
+    );
     updateProgress();
   }
 
+  // ── Download answers ──────────────────────────────────────────────────────
   function downloadAnswers() {
-    if (Object.keys(answers).length === 0) {
-      showToast('Please answer at least one question. / 请至少填写一道题。');
+    if (!validateName()) {
+      document.getElementById('respondent-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
-    const respondent = document.getElementById('respondent-name').value.trim() || 'Anonymous';
+    const hasContent = Object.keys(answers).length > 0 || skipped.size > 0;
+    if (!hasContent) {
+      showToast('Please answer or skip at least one question. / 请至少填写或跳过一道题。');
+      return;
+    }
+
+    const respondent = document.getElementById('respondent-name').value.trim();
     const now = new Date().toISOString();
 
-    // Build answer object
     const output = {
       meta: {
-        respondent: respondent,
+        respondent,
         timestamp: now,
         questionnaire: questData.meta.title.en
       },
-      answers: {}
+      answers: {},
+      skipped: []
     };
 
-    // Collect all question IDs in order
-    for (const section of questData.sections) {
+    // Collect answers in question order
+    const allSections = [...questData.sections, { questions: questData.summary.questions }];
+    for (const section of allSections) {
       for (const q of section.questions) {
-        if (answers[q.id] !== undefined) {
-          output.answers[q.id] = answers[q.id];
-        }
-      }
-    }
-    for (const q of questData.summary.questions) {
-      if (answers[q.id] !== undefined) {
-        output.answers[q.id] = answers[q.id];
+        if (answers[q.id] !== undefined) output.answers[q.id] = answers[q.id];
+        if (skipped.has(q.id)) output.skipped.push(q.id);
       }
     }
 
@@ -574,18 +1005,18 @@
     const a = document.createElement('a');
     a.href = url;
     const safeName = respondent.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_').substring(0, 30);
-    const dateStr = now.substring(0, 10);
-    a.download = `answers_${safeName}_${dateStr}.yaml`;
+    a.download = `answers_${safeName}_${now.substring(0, 10)}.yaml`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('Download started! / 下载已开始！');
+    showToast('Downloaded! / 下载完成！');
   }
 
+  // ── Toast ─────────────────────────────────────────────────────────────────
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    setTimeout(() => t.classList.remove('show'), 3200);
   }
 
   loadQuestionnaire();
