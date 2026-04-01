@@ -9,23 +9,31 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #1a3a6b;
+      --primary:       #1a3a6b;
       --primary-light: #2a5298;
-      --accent: #c8102e;
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --border: #d1d9e6;
-      --text: #1a1a2e;
-      --text-muted: #5a6a8a;
-      --section-bg: #eef2f9;
-      --zh-bg: #fdf6ec;
-      --zh-border: #e8c97a;
-      --green: #2e7d32;
-      --green-bg: #f1f8f1;
-      --yellow: #b8860b;
-      --yellow-bg: #fffbf0;
-      --red: #c62828;
-      --red-bg: #fff5f5;
+      --accent:        #c8102e;
+      --bg:            #f5f7fa;
+      --card:          #ffffff;
+      --border:        #d1d9e6;
+      --text:          #1a1a2e;
+      --text-muted:    #5a6a8a;
+      --section-bg:    #eef2f9;
+      --zh-bg:         #fdf6ec;
+      --zh-border:     #e8c97a;
+
+      /* State colors */
+      --red:           #c62828;
+      --red-bg:        #fff5f5;
+      --blue:          #1565c0;
+      --blue-light:    #1976d2;
+      --blue-bg:       #e8f0fe;
+      --blue-border:   #90b4f8;
+      --green:         #2e7d32;
+      --green-bg:      #e8f5e9;
+      --green-border:  #81c784;
+      --yellow:        #b45309;
+      --yellow-bg:     #fffbeb;
+
       --toc-width: 240px;
     }
 
@@ -37,11 +45,11 @@
       line-height: 1.6;
     }
 
-    /* ── Language visibility ───────────────────────────────────────────────── */
+    /* ── Language visibility ───────────────────────────────────────────── */
     body.lang-en .zh-only { display: none; }
     body.lang-zh .en-only { display: none; }
 
-    /* ── Static header ─────────────────────────────────────────────────────── */
+    /* ── Static header ─────────────────────────────────────────────────── */
     header {
       background: var(--primary);
       color: white;
@@ -70,9 +78,9 @@
     }
     .lang-btn.active, .lang-btn:hover { background: rgba(255,255,255,0.35); }
 
-    /* ── Mobile sticky topbar ──────────────────────────────────────────────── */
+    /* ── Mobile sticky topbar ──────────────────────────────────────────── */
     .mobile-topbar {
-      display: none; /* shown via media query */
+      display: none;
       position: sticky;
       top: 0;
       z-index: 400;
@@ -113,13 +121,15 @@
       text-align: right;
     }
 
-    /* ── Page layout ───────────────────────────────────────────────────────── */
+    /* ── Page layout ───────────────────────────────────────────────────── */
+    /* TOC at left, remaining space centers the form */
     .page-layout {
       display: flex;
       align-items: flex-start;
+      min-height: calc(100vh - 120px);
     }
 
-    /* ── TOC Sidebar ───────────────────────────────────────────────────────── */
+    /* ── TOC Sidebar ───────────────────────────────────────────────────── */
     .toc-sidebar {
       width: var(--toc-width);
       flex-shrink: 0;
@@ -146,14 +156,14 @@
       margin-bottom: 8px;
     }
     .toc-title {
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--primary);
     }
     .toc-close-btn {
-      display: none; /* mobile only */
+      display: none;
       background: none;
       border: none;
       color: var(--text-muted);
@@ -171,26 +181,27 @@
     }
     .toc-progress-fill {
       height: 100%;
-      background: #4caf50;
+      background: var(--green);
       border-radius: 3px;
       transition: width 0.4s;
     }
     .toc-progress-label {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
+      line-height: 1.4;
     }
 
     .toc-legend {
-      display: flex;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
       margin-top: 8px;
-      flex-wrap: wrap;
     }
     .toc-legend-item {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.65rem;
+      gap: 5px;
+      font-size: 0.63rem;
       color: var(--text-muted);
     }
     .toc-dot-sample {
@@ -202,13 +213,12 @@
     .toc-list {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 0 80px;
-      scroll-behavior: smooth;
+      padding: 6px 0 80px;
     }
 
     .toc-section-label {
       padding: 8px 14px 3px;
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -222,16 +232,14 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      padding: 5px 14px;
+      padding: 4px 14px;
       text-decoration: none;
       cursor: pointer;
       transition: background 0.15s;
       position: relative;
     }
     .toc-q-item:hover { background: var(--section-bg); }
-    .toc-q-item.is-active {
-      background: #dce8ff;
-    }
+    .toc-q-item.is-active { background: #dce8ff; }
     .toc-q-item.is-active::before {
       content: '';
       position: absolute;
@@ -246,24 +254,24 @@
       border-radius: 50%;
       flex-shrink: 0;
       transition: background 0.3s;
+      background: #e57373; /* default = red */
     }
-    /* Default = red (unanswered) */
-    .toc-q-item .toc-dot { background: #e57373; }
-    .toc-q-item.state-answered .toc-dot { background: #4caf50; }
-    .toc-q-item.state-skipped .toc-dot { background: #f5a623; }
+    .toc-q-item.state-answered  .toc-dot { background: #5b8dee; }
+    .toc-q-item.state-confirmed .toc-dot { background: #43a047; }
+    .toc-q-item.state-skipped   .toc-dot { background: #f5a623; }
 
     .toc-qid {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 600;
       color: var(--text-muted);
       transition: color 0.2s;
     }
-    .toc-q-item.is-active .toc-qid { color: var(--primary); font-weight: 700; }
-    .toc-q-item.state-answered .toc-qid { color: var(--green); }
-    .toc-q-item.state-skipped .toc-qid { color: var(--yellow); }
-    .toc-q-item.state-unanswered .toc-qid { color: var(--red); }
+    .toc-q-item.is-active    .toc-qid { color: var(--primary); font-weight: 700; }
+    .toc-q-item.state-answered  .toc-qid { color: var(--blue); }
+    .toc-q-item.state-confirmed .toc-qid { color: var(--green); }
+    .toc-q-item.state-skipped   .toc-qid { color: var(--yellow); }
 
-    /* ── TOC Overlay (mobile backdrop) ────────────────────────────────────── */
+    /* ── TOC Overlay ───────────────────────────────────────────────────── */
     .toc-overlay {
       display: none;
       position: fixed;
@@ -273,15 +281,79 @@
     }
     .toc-overlay.show { display: block; }
 
-    /* ── Content area ─────────────────────────────────────────────────────── */
-    .content-wrap {
+    /* ── Content centering wrapper ─────────────────────────────────────── */
+    /* Fills the space to the right of the TOC and centers the form */
+    .content-area {
       flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 20px 24px 100px;
       min-width: 0;
-      padding: 16px 20px 100px;
-      max-width: 760px;
+    }
+    .content-wrap {
+      width: 100%;
+      max-width: 720px;
     }
 
-    /* ── Respondent name box ──────────────────────────────────────────────── */
+    /* ── Instruction card ──────────────────────────────────────────────── */
+    .instruction-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .instruction-card h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instruction-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .instruction-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.83rem;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .step-num {
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      line-height: 20px;
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .instruction-step .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+    .chip-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+    .chip-green  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+    .chip-yellow { background: #fff3cd;           color: var(--yellow); border: 1px solid #e8c97a; }
+
+    /* ── Respondent name ───────────────────────────────────────────────── */
     .respondent-wrap { margin-bottom: 16px; }
     .respondent-box {
       display: flex;
@@ -302,12 +374,9 @@
     }
     .required-star { color: var(--accent); margin-left: 2px; }
     .respondent-box input {
-      border: none;
-      outline: none;
-      flex: 1;
-      font-size: 0.95rem;
-      background: transparent;
-      min-width: 0;
+      border: none; outline: none;
+      flex: 1; font-size: 0.95rem;
+      background: transparent; min-width: 0;
     }
     .name-error {
       font-size: 0.78rem;
@@ -316,22 +385,22 @@
       padding-left: 4px;
     }
 
-    /* ── Section cards ────────────────────────────────────────────────────── */
+    /* ── Section cards ─────────────────────────────────────────────────── */
     .section-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       overflow: hidden;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       scroll-margin-top: 12px;
     }
     .section-header {
       background: var(--section-bg);
-      padding: 14px 20px;
+      padding: 13px 20px;
       border-bottom: 1px solid var(--border);
     }
-    .section-header h2 { font-size: 1.05rem; font-weight: 700; color: var(--primary); }
+    .section-header h2 { font-size: 1.02rem; font-weight: 700; color: var(--primary); }
     .sec-num {
       display: inline-block;
       background: var(--primary);
@@ -344,18 +413,22 @@
       font-weight: 700;
       margin-right: 8px;
     }
-    .section-desc { font-size: 0.83rem; color: var(--text-muted); margin-top: 5px; font-style: italic; }
-    .section-desc-zh { font-size: 0.8rem; color: #8a7030; margin-top: 3px; font-style: italic; }
+    .section-desc    { font-size: 0.82rem; color: var(--text-muted); margin-top: 5px; font-style: italic; }
+    .section-desc-zh { font-size: 0.79rem; color: #8a7030;           margin-top: 3px; font-style: italic; }
 
-    /* ── Question block ───────────────────────────────────────────────────── */
+    /* ── Question block ────────────────────────────────────────────────── */
     .question-block {
       padding: 18px 20px 0;
       border-bottom: 1px solid #edf0f7;
       scroll-margin-top: 12px;
-      transition: background 0.2s;
+      transition: background 0.25s;
     }
     .question-block:last-child { border-bottom: none; padding-bottom: 18px; }
-    .question-block.is-skipped { background: var(--yellow-bg); }
+
+    /* State backgrounds */
+    .question-block.is-skipped   { background: var(--yellow-bg); }
+    .question-block.is-answered  { background: #f4f7ff; }
+    .question-block.is-confirmed { background: var(--green-bg); }
 
     .q-id {
       display: inline-block;
@@ -363,21 +436,21 @@
       color: white;
       padding: 2px 8px;
       border-radius: 4px;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       font-weight: 700;
       margin-bottom: 6px;
     }
     .q-title-en { font-size: 0.97rem; font-weight: 700; }
-    .q-title-zh { font-size: 0.92rem; font-weight: 600; color: #6b4c00; margin-top: 2px; }
+    .q-title-zh { font-size: 0.91rem; font-weight: 600; color: #6b4c00; margin-top: 2px; }
 
     .q-context-en {
-      font-size: 0.85rem; color: var(--text-muted);
+      font-size: 0.84rem; color: var(--text-muted);
       margin: 8px 0 0; padding: 7px 12px;
       background: #f0f4ff; border-left: 3px solid var(--primary-light);
       border-radius: 0 6px 6px 0;
     }
     .q-context-zh {
-      font-size: 0.82rem; color: #7a5c00;
+      font-size: 0.81rem; color: #7a5c00;
       margin: 5px 0 0; padding: 7px 12px;
       background: var(--zh-bg); border-left: 3px solid var(--zh-border);
       border-radius: 0 6px 6px 0;
@@ -385,76 +458,99 @@
 
     .prompts { margin: 8px 0 0; }
     .prompt-label {
-      font-size: 0.73rem; font-weight: 700; color: var(--text-muted);
+      font-size: 0.72rem; font-weight: 700; color: var(--text-muted);
       text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px;
     }
     .prompts ul { padding-left: 18px; }
     .prompts-en ul li { font-size: 0.81rem; color: #3a4a6a; margin-bottom: 2px; }
     .prompts-zh ul li { font-size: 0.78rem; color: #7a5c00; margin-bottom: 2px; }
 
-    /* ── Skip checkbox ────────────────────────────────────────────────────── */
-    .skip-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 10px 0 4px;
-    }
-    .skip-checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      user-select: none;
-      padding: 3px 10px 3px 6px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: white;
-      transition: all 0.2s;
-    }
-    .skip-checkbox-label:hover { border-color: var(--yellow); color: var(--yellow); }
-    .skip-checkbox-label input[type="checkbox"] { accent-color: var(--yellow); }
-    .is-skipped .skip-checkbox-label {
-      border-color: var(--yellow);
-      background: #fff3cd;
-      color: var(--yellow);
-      font-weight: 600;
-    }
-
-    /* ── Answer textarea ──────────────────────────────────────────────────── */
-    .answer-area { margin: 8px 0 18px; }
+    /* ── Answer textarea ───────────────────────────────────────────────── */
+    .answer-area { margin: 8px 0 12px; }
     .answer-area label {
-      display: block; font-size: 0.75rem; font-weight: 700;
+      display: block; font-size: 0.74rem; font-weight: 700;
       color: var(--primary); margin-bottom: 4px;
     }
     .answer-area textarea {
       width: 100%; min-height: 88px;
       border: 1.5px solid var(--border); border-radius: 8px;
       padding: 9px 12px; font-size: 0.9rem; font-family: inherit;
-      color: var(--text); resize: vertical; transition: border-color 0.2s;
+      color: var(--text); resize: vertical; transition: border-color 0.2s, background 0.2s;
       background: #fafbff;
     }
-    .answer-area textarea:focus { outline: none; border-color: var(--primary-light); background: white; }
-    .answer-area textarea.has-content { border-color: #4caf50; background: var(--green-bg); }
+    .answer-area textarea:focus { outline: none; border-color: var(--blue-light); background: white; }
+    /* Answered = blue border */
+    .answer-area textarea.has-content { border-color: var(--blue-border); background: var(--blue-bg); }
+    /* Confirmed = green border */
+    .is-confirmed .answer-area textarea.has-content { border-color: var(--green-border); background: var(--green-bg); }
     .answer-area textarea:disabled {
-      opacity: 0.4; cursor: not-allowed; resize: none;
-      border-style: dashed; background: #fafafa;
+      opacity: 0.35; cursor: not-allowed; resize: none;
+      border-style: dashed; background: #f5f5f5;
     }
 
-    /* ── Summary card ─────────────────────────────────────────────────────── */
+    /* ── Action row (Skip + Confirm) ───────────────────────────────────── */
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0 0;
+      flex-wrap: wrap;
+    }
+
+    /* Shared pill style */
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 500;
+      user-select: none;
+      padding: 4px 12px 4px 8px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: white;
+      transition: all 0.18s;
+    }
+    .pill-label input[type="checkbox"] { width: 14px; height: 14px; }
+
+    /* Skip pill */
+    .skip-pill { color: var(--text-muted); }
+    .skip-pill:hover:not([aria-disabled="true"]) { border-color: var(--yellow); color: var(--yellow); }
+    .skip-pill input { accent-color: var(--yellow); }
+    .is-skipped .skip-pill {
+      border-color: var(--yellow); background: #fff3cd;
+      color: var(--yellow); font-weight: 600;
+    }
+
+    /* Confirm pill */
+    .confirm-pill { color: var(--text-muted); }
+    .confirm-pill:hover:not([aria-disabled="true"]) { border-color: var(--green); color: var(--green); }
+    .confirm-pill input { accent-color: var(--green); }
+    .is-confirmed .confirm-pill {
+      border-color: var(--green-border); background: var(--green-bg);
+      color: var(--green); font-weight: 600;
+    }
+    /* Disable confirm when skipped */
+    .confirm-pill.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── Summary card ──────────────────────────────────────────────────── */
     .summary-card {
       background: var(--card);
       border: 2px solid var(--primary);
       border-radius: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       overflow: hidden;
       scroll-margin-top: 12px;
     }
-    .summary-header { background: var(--primary); color: white; padding: 14px 20px; }
-    .summary-header h2 { font-size: 1.05rem; font-weight: 700; }
+    .summary-header { background: var(--primary); color: white; padding: 13px 20px; }
+    .summary-header h2 { font-size: 1.02rem; font-weight: 700; }
 
-    /* ── Sticky footer ────────────────────────────────────────────────────── */
+    /* ── Sticky footer ─────────────────────────────────────────────────── */
     .sticky-footer {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -477,19 +573,17 @@
     .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
     .btn-secondary:hover { background: var(--section-bg); }
 
-    /* ── Loading ──────────────────────────────────────────────────────────── */
+    /* ── Loading / Toast ───────────────────────────────────────────────── */
     .loading { text-align: center; padding: 60px 20px; color: var(--text-muted); }
     .loading-spinner {
       width: 38px; height: 38px;
-      border: 4px solid var(--border);
-      border-top-color: var(--primary);
+      border: 4px solid var(--border); border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 14px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Toast ────────────────────────────────────────────────────────────── */
     .toast {
       position: fixed;
       bottom: 72px; left: 50%;
@@ -501,7 +595,7 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Mobile ───────────────────────────────────────────────────────────── */
+    /* ── Mobile ────────────────────────────────────────────────────────── */
     @media (max-width: 768px) {
       .mobile-topbar { display: flex; }
 
@@ -517,9 +611,7 @@
       .toc-sidebar.toc-open { left: 0; }
       .toc-close-btn { display: block; }
 
-      .content-wrap { padding: 12px 14px 100px; }
-
-      /* Push content from under mobile topbar on scroll */
+      .content-area { padding: 12px 14px 100px; }
       .section-card, .summary-card { scroll-margin-top: 56px; }
       .question-block { scroll-margin-top: 56px; }
     }
@@ -560,7 +652,7 @@
   <!-- TOC Overlay (mobile backdrop) -->
   <div class="toc-overlay" id="toc-overlay" onclick="toggleToc()"></div>
 
-  <!-- TOC Sidebar -->
+  <!-- TOC Sidebar — leftmost -->
   <nav class="toc-sidebar" id="toc-sidebar" aria-label="Table of contents">
     <div class="toc-top">
       <div class="toc-title-row">
@@ -568,17 +660,19 @@
         <button class="toc-close-btn" onclick="toggleToc()" aria-label="Close">✕</button>
       </div>
 
-      <!-- Progress bar inside TOC top -->
       <div class="toc-progress-track">
         <div class="toc-progress-fill" id="toc-prog-fill" style="width:0%"></div>
       </div>
-      <div class="toc-progress-label" id="toc-prog-label">0 / 0 answered</div>
+      <div class="toc-progress-label" id="toc-prog-label">—</div>
 
-      <!-- Legend -->
       <div class="toc-legend">
         <div class="toc-legend-item">
-          <div class="toc-dot-sample" style="background:#4caf50"></div>
-          <span class="en-only">Answered</span><span class="zh-only">已回答</span>
+          <div class="toc-dot-sample" style="background:#43a047"></div>
+          <span class="en-only">Confirmed</span><span class="zh-only">已确认</span>
+        </div>
+        <div class="toc-legend-item">
+          <div class="toc-dot-sample" style="background:#5b8dee"></div>
+          <span class="en-only">Answered</span><span class="zh-only">已作答</span>
         </div>
         <div class="toc-legend-item">
           <div class="toc-dot-sample" style="background:#f5a623"></div>
@@ -591,40 +685,117 @@
       </div>
     </div>
 
-    <div class="toc-list" id="toc-list">
-      <!-- Populated by JS -->
-    </div>
+    <div class="toc-list" id="toc-list"></div>
   </nav>
 
-  <!-- Content -->
-  <div class="content-wrap">
+  <!-- Content area — centered in remaining space -->
+  <div class="content-area">
+    <div class="content-wrap">
 
-    <!-- Respondent name (mandatory) -->
-    <div class="respondent-wrap">
-      <div class="respondent-box" id="respondent-box">
-        <label for="respondent-name">
-          <span class="en-only">Your Name</span>
-          <span class="zh-only">您的姓名</span>
-          <span class="required-star">*</span>
-        </label>
-        <input type="text" id="respondent-name"
-               placeholder="Required before download / 下载前必填"
-               oninput="clearNameError()" />
-      </div>
-      <div class="name-error" id="name-error" style="display:none">
-        <span class="en-only">Please enter your name before downloading.</span>
-        <span class="zh-only">下载前请填写您的姓名。</span>
-      </div>
-    </div>
+      <!-- Instruction card -->
+      <div class="instruction-card">
+        <h3>
+          📋
+          <span class="en-only">How to complete this questionnaire</span>
+          <span class="zh-only">问卷填写说明</span>
+        </h3>
+        <div class="instruction-steps">
 
-    <main id="main-content">
-      <div class="loading">
-        <div class="loading-spinner"></div>
-        <p>Loading questionnaire… / 加载问卷中…</p>
+          <div class="instruction-step">
+            <span class="step-num">1</span>
+            <span class="en-only">Enter your <strong>name</strong> below — it is required before downloading.</span>
+            <span class="zh-only">在下方填写您的<strong>姓名</strong>——下载前为必填项。</span>
+          </div>
+
+          <div class="instruction-step">
+            <span class="step-num">2</span>
+            <div>
+              <span class="en-only">
+                For each question, <strong>write your answer</strong> in the text box. The question turns
+                <span class="chip chip-blue">● Answered</span> when you type.
+              </span>
+              <span class="zh-only">
+                对于每道题，在文本框中<strong>填写您的回答</strong>。填写后题目变为
+                <span class="chip chip-blue">● 已作答</span>。
+              </span>
+            </div>
+          </div>
+
+          <div class="instruction-step">
+            <span class="step-num">3</span>
+            <div>
+              <span class="en-only">
+                When satisfied with your answer, check
+                <span class="chip chip-green">✓ Confirmed</span>
+                to mark it as final and turn it green.
+              </span>
+              <span class="zh-only">
+                对回答满意后，勾选
+                <span class="chip chip-green">✓ 已确认</span>
+                将其标记为最终答案，题目变绿。
+              </span>
+            </div>
+          </div>
+
+          <div class="instruction-step">
+            <span class="step-num">4</span>
+            <div>
+              <span class="en-only">
+                If you have no opinion on a question, check
+                <span class="chip chip-yellow">⊘ Skip</span>.
+                You can skip and come back later.
+              </span>
+              <span class="zh-only">
+                如对某题无意见，勾选
+                <span class="chip chip-yellow">⊘ 跳过此题</span>。
+                可以随时跳过并稍后返回。
+              </span>
+            </div>
+          </div>
+
+          <div class="instruction-step">
+            <span class="step-num">5</span>
+            <span class="en-only">
+              Use the <strong>table of contents</strong> on the left to track your progress.
+              When ready, click <strong>Download Answers</strong> to save a YAML file for submission.
+            </span>
+            <span class="zh-only">
+              使用左侧<strong>目录</strong>追踪答题进度。
+              完成后点击<strong>下载答卷</strong>，保存YAML文件供提交。
+            </span>
+          </div>
+
+        </div>
       </div>
-    </main>
-  </div>
-</div>
+
+      <!-- Respondent name (mandatory) -->
+      <div class="respondent-wrap">
+        <div class="respondent-box" id="respondent-box">
+          <label for="respondent-name">
+            <span class="en-only">Your Name</span>
+            <span class="zh-only">您的姓名</span>
+            <span class="required-star">*</span>
+          </label>
+          <input type="text" id="respondent-name"
+                 placeholder="Required before download / 下载前必填"
+                 oninput="clearNameError()" />
+        </div>
+        <div class="name-error" id="name-error" style="display:none">
+          <span class="en-only">Please enter your name before downloading.</span>
+          <span class="zh-only">下载前请填写您的姓名。</span>
+        </div>
+      </div>
+
+      <main id="main-content">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <p>Loading questionnaire… / 加载问卷中…</p>
+        </div>
+      </main>
+    </div><!-- .content-wrap -->
+  </div><!-- .content-area -->
+
+</div><!-- .page-layout -->
 
 <!-- Sticky footer -->
 <div class="sticky-footer">
@@ -642,23 +813,20 @@
 
 <script>
   // ── State ──────────────────────────────────────────────────────────────────
-  let questData = null;
-  const answers = {};         // qid → text
-  const skipped = new Set();  // skipped qids
+  let questData   = null;
+  const answers   = {};          // qid → text
+  const skipped   = new Set();   // skipped qids
+  const confirmed = new Set();   // confirmed qids
   let currentLang = 'both';
-  let tocIsOpen = false;
+  let tocIsOpen   = false;
 
   // ── Language ───────────────────────────────────────────────────────────────
   function setLang(mode) {
     currentLang = mode;
-    applyBodyClass();
+    document.body.className = 'lang-' + currentLang;
     document.querySelectorAll('.lang-btn').forEach((b, i) =>
       b.classList.toggle('active', ['both','en','zh'][i] === mode)
     );
-  }
-
-  function applyBodyClass() {
-    document.body.className = 'lang-' + currentLang + (tocIsOpen ? ' toc-open' : '');
   }
 
   // ── TOC toggle (mobile) ────────────────────────────────────────────────────
@@ -693,7 +861,6 @@
       main.appendChild(renderSection(section));
     }
 
-    // Summary section
     const sum = questData.summary;
     const sumCard = document.createElement('div');
     sumCard.className = 'summary-card';
@@ -704,8 +871,8 @@
           <span class="en-only">${sum.title.en}</span>
           <span class="zh-only">${sum.title.zh}</span>
         </h2>
-        <div class="section-desc en-only">${sum.description.en}</div>
-        <div class="section-desc-zh zh-only">${sum.description.zh}</div>
+        <div class="section-desc en-only" style="color:rgba(255,255,255,0.75)">${sum.description.en}</div>
+        <div class="section-desc zh-only" style="color:rgba(255,255,255,0.75);font-style:italic;margin-top:3px;font-size:0.79rem">${sum.description.zh}</div>
       </div>`;
     for (const q of sum.questions) sumCard.appendChild(renderQuestion(q));
     main.appendChild(sumCard);
@@ -719,7 +886,7 @@
     const card = document.createElement('div');
     card.className = 'section-card';
     card.id = 'section-' + section.id;
-    const hasDesc = section.description && (section.description.en || section.description.zh);
+    const hasDesc = section.description?.en || section.description?.zh;
     card.innerHTML = `
       <div class="section-header">
         <h2>
@@ -762,11 +929,16 @@
           <div class="prompt-label">您的回答应涵盖：</div>
           <ul>${liZh}</ul>
         </div>` : ''}
-      <div class="skip-row">
-        <label class="skip-checkbox-label">
-          <input type="checkbox" data-qid="${q.id}" onchange="onSkipChange(this)" />
-          <span class="en-only">Mark as Skipped</span>
-          <span class="zh-only">跳过此题</span>
+      <div class="action-row">
+        <label class="pill-label skip-pill" id="skip-label-${q.id}">
+          <input type="checkbox" id="skip-${q.id}" data-qid="${q.id}" onchange="onSkipChange(this)" />
+          <span class="en-only">⊘ Mark as Skipped</span>
+          <span class="zh-only">⊘ 跳过此题</span>
+        </label>
+        <label class="pill-label confirm-pill" id="confirm-label-${q.id}">
+          <input type="checkbox" id="confirm-${q.id}" data-qid="${q.id}" onchange="onConfirmChange(this)" />
+          <span class="en-only">✓ Confirmed</span>
+          <span class="zh-only">✓ 已确认</span>
         </label>
       </div>
       <div class="answer-area">
@@ -792,7 +964,9 @@
     const addSection = (id, titleEn, titleZh, questions) => {
       const label = document.createElement('div');
       label.className = 'toc-section-label';
-      label.innerHTML = `<span class="en-only">§${id} ${titleEn}</span><span class="zh-only">§${id} ${titleZh}</span>`;
+      label.innerHTML =
+        `<span class="en-only">§${id} ${titleEn}</span>` +
+        `<span class="zh-only">§${id} ${titleZh}</span>`;
       list.appendChild(label);
 
       for (const q of questions) {
@@ -801,10 +975,10 @@
         a.dataset.qid = q.id;
         a.href = '#q-' + q.id;
         a.innerHTML = `<span class="toc-dot"></span><span class="toc-qid">${q.id}</span>`;
-        a.addEventListener('click', (e) => {
+        a.addEventListener('click', e => {
           e.preventDefault();
           document.getElementById('q-' + q.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          if (tocIsOpen) toggleToc(); // close on mobile after click
+          if (tocIsOpen) toggleToc();
         });
         list.appendChild(a);
       }
@@ -817,38 +991,53 @@
   }
 
   // ── Update a single TOC dot ────────────────────────────────────────────────
+  // Priority: skipped > confirmed > answered > default(red)
   function updateTocItem(qid) {
     const el = document.querySelector(`.toc-q-item[data-qid="${qid}"]`);
     if (!el) return;
-    el.classList.remove('state-answered', 'state-skipped');
+    el.classList.remove('state-answered', 'state-confirmed', 'state-skipped');
     if (skipped.has(qid)) {
       el.classList.add('state-skipped');
+    } else if (confirmed.has(qid)) {
+      el.classList.add('state-confirmed');
     } else if (answers[qid]) {
       el.classList.add('state-answered');
     }
-    // default = red (no extra class needed; CSS covers it)
+  }
+
+  // ── Update question block background class ─────────────────────────────────
+  function updateBlockClass(qid) {
+    const block = document.getElementById('q-' + qid);
+    if (!block) return;
+    block.classList.remove('is-skipped', 'is-answered', 'is-confirmed');
+    if (skipped.has(qid)) {
+      block.classList.add('is-skipped');
+    } else if (confirmed.has(qid)) {
+      block.classList.add('is-confirmed');
+    } else if (answers[qid]) {
+      block.classList.add('is-answered');
+    }
   }
 
   // ── Progress ───────────────────────────────────────────────────────────────
   function updateProgress() {
-    let total = 0, answered = 0, nSkipped = 0;
+    let total = 0, nConfirmed = 0, nAnswered = 0, nSkipped = 0;
     document.querySelectorAll('textarea[data-qid]').forEach(t => {
       total++;
       const qid = t.dataset.qid;
-      if (skipped.has(qid)) nSkipped++;
-      else if (t.value.trim()) answered++;
+      if (skipped.has(qid))        nSkipped++;
+      else if (confirmed.has(qid)) nConfirmed++;
+      else if (answers[qid])       nAnswered++;
     });
-    const done = answered + nSkipped;
-    const pct = total > 0 ? Math.round(done / total * 100) : 0;
+    const done = nConfirmed + nAnswered + nSkipped;
+    const pct  = total > 0 ? Math.round(done / total * 100) : 0;
 
-    // TOC progress bar
     document.getElementById('toc-prog-fill').style.width = pct + '%';
     document.getElementById('toc-prog-label').textContent =
-      `${answered} answered, ${nSkipped} skipped / ${total}`;
+      `${nConfirmed} confirmed · ${nAnswered} answered · ${nSkipped} skipped / ${total}`;
 
-    // Mobile progress bar
     document.getElementById('mob-prog-fill').style.width = pct + '%';
-    document.getElementById('mob-prog-label').textContent = `${done}/${total}`;
+    document.getElementById('mob-prog-label').textContent = `${done}/${total} (${pct}%)`;
   }
 
   // ── Answer change ─────────────────────────────────────────────────────────
@@ -863,25 +1052,29 @@
       textarea.classList.remove('has-content');
     }
     updateTocItem(qid);
+    updateBlockClass(qid);
     updateProgress();
   }
 
   // ── Skip change ───────────────────────────────────────────────────────────
   function onSkipChange(checkbox) {
     const qid = checkbox.dataset.qid;
-    const block = document.getElementById('q-' + qid);
-    const textarea = document.getElementById('ans-' + qid);
+    const textarea      = document.getElementById('ans-' + qid);
+    const confirmLabel  = document.getElementById('confirm-label-' + qid);
+    const confirmCb     = document.getElementById('confirm-' + qid);
 
     if (checkbox.checked) {
       skipped.add(qid);
-      block.classList.add('is-skipped');
       textarea.disabled = true;
       textarea.classList.remove('has-content');
-      // Keep any existing answer text but don't count it
+      // Disable and uncheck confirm
+      confirmed.delete(qid);
+      confirmCb.checked = false;
+      confirmLabel.classList.add('disabled');
     } else {
       skipped.delete(qid);
-      block.classList.remove('is-skipped');
       textarea.disabled = false;
+      confirmLabel.classList.remove('disabled');
       // Re-evaluate answer state
       if (textarea.value.trim()) {
         answers[qid] = textarea.value.trim();
@@ -889,28 +1082,37 @@
       }
     }
     updateTocItem(qid);
+    updateBlockClass(qid);
     updateProgress();
   }
 
-  // ── IntersectionObserver: track current question in viewport ──────────────
+  // ── Confirm change ────────────────────────────────────────────────────────
+  function onConfirmChange(checkbox) {
+    const qid = checkbox.dataset.qid;
+    if (checkbox.checked) {
+      confirmed.add(qid);
+    } else {
+      confirmed.delete(qid);
+    }
+    updateTocItem(qid);
+    updateBlockClass(qid);
+    updateProgress();
+  }
+
+  // ── IntersectionObserver ──────────────────────────────────────────────────
   function initIntersectionObserver() {
     const observer = new IntersectionObserver(entries => {
-      // Find the entry that is most in the middle of the screen
       let best = null, bestDist = Infinity;
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const rect = entry.boundingClientRect;
-          const mid = (rect.top + rect.bottom) / 2;
-          const viewMid = window.innerHeight / 2;
-          const dist = Math.abs(mid - viewMid);
+          const mid  = (rect.top + rect.bottom) / 2;
+          const dist = Math.abs(mid - window.innerHeight / 2);
           if (dist < bestDist) { bestDist = dist; best = entry.target; }
         }
       });
       if (best) setActiveTocItem(best.dataset.qid);
-    }, {
-      rootMargin: '-10% 0px -50% 0px',
-      threshold: 0
-    });
+    }, { rootMargin: '-10% 0px -50% 0px', threshold: 0 });
 
     document.querySelectorAll('.question-block[data-qid]').forEach(el => observer.observe(el));
   }
@@ -920,11 +1122,9 @@
     const item = document.querySelector(`.toc-q-item[data-qid="${qid}"]`);
     if (!item) return;
     item.classList.add('is-active');
-
     // Scroll TOC list to center this item
     const tocList = document.getElementById('toc-list');
-    const itemMid = item.offsetTop + item.offsetHeight / 2;
-    const targetScroll = itemMid - tocList.clientHeight / 2;
+    const targetScroll = item.offsetTop - tocList.clientHeight / 2 + item.offsetHeight / 2;
     tocList.scrollTo({ top: targetScroll, behavior: 'smooth' });
   }
 
@@ -948,18 +1148,25 @@
 
   // ── Clear all ─────────────────────────────────────────────────────────────
   function clearAll() {
-    if (!confirm('Clear all answers and skips? / 确认清空所有回答和跳过标记？')) return;
+    if (!confirm('Clear all answers, skips, and confirmations? / 确认清空所有回答、跳过和确认标记？')) return;
+
     document.querySelectorAll('textarea[data-qid]').forEach(t => {
       t.value = ''; t.classList.remove('has-content'); t.disabled = false;
     });
     document.querySelectorAll('input[type="checkbox"][data-qid]').forEach(c => {
       c.checked = false;
-      document.getElementById('q-' + c.dataset.qid)?.classList.remove('is-skipped');
     });
+    document.querySelectorAll('.confirm-pill').forEach(l => l.classList.remove('disabled'));
+    document.querySelectorAll('.question-block').forEach(b =>
+      b.classList.remove('is-skipped', 'is-answered', 'is-confirmed')
+    );
+
     Object.keys(answers).forEach(k => delete answers[k]);
     skipped.clear();
+    confirmed.clear();
+
     document.querySelectorAll('.toc-q-item').forEach(el =>
-      el.classList.remove('state-answered', 'state-skipped')
+      el.classList.remove('state-answered', 'state-confirmed', 'state-skipped')
     );
     updateProgress();
   }
@@ -970,10 +1177,8 @@
       document.getElementById('respondent-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-
-    const hasContent = Object.keys(answers).length > 0 || skipped.size > 0;
-    if (!hasContent) {
-      showToast('Please answer or skip at least one question. / 请至少填写或跳过一道题。');
+    if (Object.keys(answers).length === 0 && skipped.size === 0 && confirmed.size === 0) {
+      showToast('Please answer at least one question. / 请至少填写一道题。');
       return;
     }
 
@@ -981,31 +1186,28 @@
     const now = new Date().toISOString();
 
     const output = {
-      meta: {
-        respondent,
-        timestamp: now,
-        questionnaire: questData.meta.title.en
-      },
-      answers: {},
-      skipped: []
+      meta: { respondent, timestamp: now, questionnaire: questData.meta.title.en },
+      answers:   {},
+      confirmed: [],
+      skipped:   []
     };
 
-    // Collect answers in question order
     const allSections = [...questData.sections, { questions: questData.summary.questions }];
     for (const section of allSections) {
       for (const q of section.questions) {
-        if (answers[q.id] !== undefined) output.answers[q.id] = answers[q.id];
-        if (skipped.has(q.id)) output.skipped.push(q.id);
+        if (answers[q.id]    !== undefined) output.answers[q.id] = answers[q.id];
+        if (confirmed.has(q.id))            output.confirmed.push(q.id);
+        if (skipped.has(q.id))              output.skipped.push(q.id);
       }
     }
 
     const yamlStr = jsyaml.dump(output, { lineWidth: 100, indent: 2 });
     const blob = new Blob([yamlStr], { type: 'text/yaml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
     a.href = url;
     const safeName = respondent.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '_').substring(0, 30);
-    a.download = `answers_${safeName}_${now.substring(0, 10)}.yaml`;
+    a.download = `answers_${safeName}_${now.substring(0,10)}.yaml`;
     a.click();
     URL.revokeObjectURL(url);
     showToast('Downloaded! / 下载完成！');
