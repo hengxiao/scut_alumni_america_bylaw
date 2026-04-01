@@ -565,12 +565,38 @@
       border-color: var(--green-border); background: var(--green-bg);
       color: var(--green); font-weight: 600;
     }
-    /* Disable confirm when skipped */
+    /* Disable confirm when skipped or empty */
     .confirm-pill.disabled {
       opacity: 0.4;
       cursor: not-allowed;
       pointer-events: none;
     }
+
+    /* Inline hint next to disabled confirm */
+    .pill-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-style: italic;
+      align-self: center;
+    }
+
+    /* Copy button */
+    .copy-btn {
+      margin-left: auto;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.18s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--section-bg); }
 
     /* ── Summary card ──────────────────────────────────────────────────── */
     .summary-card {
@@ -603,9 +629,18 @@
       cursor: pointer; border: none; transition: all 0.2s;
     }
     .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-light); }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-light); }
+    .btn-primary:disabled { background: #9eb0c8; cursor: not-allowed; }
     .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
     .btn-secondary:hover { background: var(--section-bg); }
+
+    .download-hint {
+      font-size: 0.75rem;
+      color: #b45309;
+      text-align: center;
+      padding: 4px 0 0;
+      line-height: 1.4;
+    }
 
     /* ── Loading / Toast ───────────────────────────────────────────────── */
     .loading { text-align: center; padding: 60px 20px; color: var(--text-muted); }
@@ -833,15 +868,18 @@
 </div><!-- .page-layout -->
 
 <!-- Sticky footer -->
-<div class="sticky-footer">
-  <button class="btn btn-secondary" onclick="clearAll()">
-    <span class="en-only">Clear All</span>
-    <span class="zh-only">清空</span>
-  </button>
-  <button class="btn btn-primary" onclick="downloadAnswers()">
-    <span class="en-only">Download Answers</span>
-    <span class="zh-only">下载答卷</span>
-  </button>
+<div class="sticky-footer" style="flex-direction:column; align-items:center; gap:6px;">
+  <div style="display:flex; gap:12px;">
+    <button class="btn btn-secondary" onclick="clearAll()">
+      <span class="en-only">Clear All</span>
+      <span class="zh-only">清空</span>
+    </button>
+    <button id="download-btn" class="btn btn-primary" onclick="downloadAnswers()" disabled>
+      <span class="en-only">Download Answers</span>
+      <span class="zh-only">下载答卷</span>
+    </button>
+  </div>
+  <div id="download-hint" class="download-hint"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -869,6 +907,103 @@
     tocIsOpen = !tocIsOpen;
     document.getElementById('toc-sidebar').classList.toggle('toc-open', tocIsOpen);
     document.getElementById('toc-overlay').classList.toggle('show', tocIsOpen);
+  }
+
+  // ── Question lookup helpers ───────────────────────────────────────────────
+  function getAllQids() {
+    if (!questData) return [];
+    const qids = [];
+    for (const sec of questData.sections) for (const q of sec.questions) qids.push(q.id);
+    for (const q of questData.summary.questions) qids.push(q.id);
+    return qids;
+  }
+
+  function findQuestion(qid) {
+    if (!questData) return null;
+    for (const sec of questData.sections) {
+      const q = sec.questions.find(q => q.id === qid);
+      if (q) return q;
+    }
+    return questData.summary.questions.find(q => q.id === qid) || null;
+  }
+
+  // ── Confirm pill enable/disable based on answer presence ─────────────────
+  function updateConfirmPill(qid) {
+    if (skipped.has(qid)) return; // skip handler manages it
+    const confirmLabel = document.getElementById('confirm-label-' + qid);
+    const confirmHint  = document.getElementById('confirm-hint-' + qid);
+    if (!confirmLabel) return;
+    const hasAnswer = !!answers[qid];
+    if (hasAnswer) {
+      confirmLabel.classList.remove('disabled');
+      confirmLabel.title = '';
+      if (confirmHint) confirmHint.style.display = 'none';
+    } else {
+      // If answer cleared, also uncheck confirm
+      const confirmCb = document.getElementById('confirm-' + qid);
+      if (confirmCb && confirmCb.checked) {
+        confirmCb.checked = false;
+        confirmed.delete(qid);
+      }
+      confirmLabel.classList.add('disabled');
+      confirmLabel.title = 'Write an answer first / 请先填写答案';
+      if (confirmHint) confirmHint.style.display = '';
+    }
+  }
+
+  // ── Download button enable/disable ────────────────────────────────────────
+  function updateDownloadBtn() {
+    const btn  = document.getElementById('download-btn');
+    const hint = document.getElementById('download-hint');
+    if (!btn || !questData) return;
+    const pending = getAllQids().filter(
+      qid => !skipped.has(qid) && !(answers[qid] && confirmed.has(qid))
+    );
+    if (pending.length === 0) {
+      btn.disabled = false;
+      if (hint) hint.innerHTML = '';
+    } else {
+      btn.disabled = true;
+      if (hint) hint.innerHTML =
+        `<span class="en-only">${pending.length} question${pending.length > 1 ? 's' : ''} still need answer+confirm or skip</span>` +
+        `<span class="zh-only">还有 ${pending.length} 道题需作答确认或跳过</span>`;
+    }
+  }
+
+  // ── Copy question to clipboard ────────────────────────────────────────────
+  function copyQuestion(qid) {
+    const q = findQuestion(qid);
+    if (!q) return;
+    const lines = [];
+    lines.push(`[${q.id}] ${q.title.en}`);
+    lines.push(`[${q.id}] ${q.title.zh}`);
+    if (q.context?.en) lines.push('\n' + q.context.en);
+    if (q.context?.zh) lines.push(q.context.zh);
+    if (q.prompts?.en?.length) {
+      lines.push('\nYour response should address:');
+      q.prompts.en.forEach(p => lines.push('• ' + p));
+    }
+    if (q.prompts?.zh?.length) {
+      lines.push('\n您的回答应涵盖：');
+      q.prompts.zh.forEach(p => lines.push('• ' + p));
+    }
+    const text = lines.join('\n');
+    const doToast = () => showToast('Copied to clipboard! / 已复制到剪贴板');
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(doToast).catch(() => fallbackCopy(text, doToast));
+    } else {
+      fallbackCopy(text, doToast);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e) {}
+    document.body.removeChild(ta);
   }
 
   // ── localStorage persistence ──────────────────────────────────────────────
@@ -950,8 +1085,9 @@
     // Refresh all visual states
     const allQids = [...document.querySelectorAll('.question-block[data-qid]')]
       .map(el => el.dataset.qid);
-    allQids.forEach(qid => { updateTocItem(qid); updateBlockClass(qid); });
+    allQids.forEach(qid => { updateTocItem(qid); updateBlockClass(qid); updateConfirmPill(qid); });
     updateProgress();
+    updateDownloadBtn();
 
     // Show restoration banner if there was meaningful state
     if (stored.respondent || stored.skipped?.length || stored.confirmed?.length ||
@@ -1085,11 +1221,22 @@
           <span class="en-only">⊘ Mark as Skipped</span>
           <span class="zh-only">⊘ 跳过此题</span>
         </label>
-        <label class="pill-label confirm-pill" id="confirm-label-${q.id}">
+        <label class="pill-label confirm-pill disabled" id="confirm-label-${q.id}"
+               title="Write an answer first / 请先填写答案">
           <input type="checkbox" id="confirm-${q.id}" data-qid="${q.id}" onchange="onConfirmChange(this)" />
           <span class="en-only">✓ Confirmed</span>
           <span class="zh-only">✓ 已确认</span>
         </label>
+        <span class="pill-hint" id="confirm-hint-${q.id}">
+          <span class="en-only">Write an answer first</span>
+          <span class="zh-only">请先填写答案</span>
+        </span>
+        <button class="copy-btn" onclick="copyQuestion('${q.id}')"
+                title="Copy question text / 复制题目内容">
+          <span>📋</span>
+          <span class="en-only">Copy</span>
+          <span class="zh-only">复制</span>
+        </button>
       </div>
       <div class="answer-area">
         <label>
@@ -1204,6 +1351,8 @@
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    updateConfirmPill(qid);
+    updateDownloadBtn();
     scheduleSave();
   }
 
@@ -1225,16 +1374,17 @@
     } else {
       skipped.delete(qid);
       textarea.disabled = false;
-      confirmLabel.classList.remove('disabled');
       // Re-evaluate answer state
       if (textarea.value.trim()) {
         answers[qid] = textarea.value.trim();
         textarea.classList.add('has-content');
       }
+      updateConfirmPill(qid); // re-enable confirm only if answer exists
     }
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    updateDownloadBtn();
     saveState();
   }
 
@@ -1249,6 +1399,7 @@
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    updateDownloadBtn();
     saveState();
   }
 
@@ -1321,7 +1472,10 @@
     document.querySelectorAll('.toc-q-item').forEach(el =>
       el.classList.remove('state-answered', 'state-confirmed', 'state-skipped')
     );
+    // Reset confirm pills to disabled (no answer)
+    getAllQids().forEach(qid => updateConfirmPill(qid));
     updateProgress();
+    updateDownloadBtn();
     localStorage.removeItem(STORAGE_KEY);
   }
 
