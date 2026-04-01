@@ -191,6 +191,40 @@
       line-height: 1.4;
     }
 
+    .autosave-status {
+      font-size: 0.65rem;
+      color: #43a047;
+      margin-top: 3px;
+      min-height: 1em;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .autosave-status.show { opacity: 1; }
+
+    .restore-banner {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      font-size: 0.87rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .restore-banner-text { flex: 1; min-width: 200px; }
+    .restore-discard-btn {
+      background: #fff;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+    .restore-discard-btn:hover { background: #f5f5f5; }
+
     .toc-legend {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -664,6 +698,7 @@
         <div class="toc-progress-fill" id="toc-prog-fill" style="width:0%"></div>
       </div>
       <div class="toc-progress-label" id="toc-prog-label">—</div>
+      <div class="autosave-status" id="autosave-status">✓ Auto-saved / 已自动保存</div>
 
       <div class="toc-legend">
         <div class="toc-legend-item">
@@ -778,7 +813,7 @@
           </label>
           <input type="text" id="respondent-name"
                  placeholder="Required before download / 下载前必填"
-                 oninput="clearNameError()" />
+                 oninput="clearNameError(); saveState();" />
         </div>
         <div class="name-error" id="name-error" style="display:none">
           <span class="en-only">Please enter your name before downloading.</span>
@@ -836,6 +871,120 @@
     document.getElementById('toc-overlay').classList.toggle('show', tocIsOpen);
   }
 
+  // ── localStorage persistence ──────────────────────────────────────────────
+  const STORAGE_KEY = 'scut-bylaw-q-state';
+  let saveTimer = null;
+
+  function saveState() {
+    const respondent = document.getElementById('respondent-name').value;
+    const state = {
+      respondent,
+      answers:   { ...answers },
+      skipped:   [...skipped],
+      confirmed: [...confirmed]
+    };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) { /* storage full or private browsing — ignore */ }
+    // Flash auto-save indicator
+    const el = document.getElementById('autosave-status');
+    if (el) {
+      el.classList.add('show');
+      clearTimeout(el._hideTimer);
+      el._hideTimer = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveState, 800);
+  }
+
+  function restoreState() {
+    let stored;
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return; }
+    if (!stored) return;
+
+    // Restore name
+    if (stored.respondent) {
+      document.getElementById('respondent-name').value = stored.respondent;
+    }
+
+    // Restore answers
+    if (stored.answers) {
+      for (const [qid, val] of Object.entries(stored.answers)) {
+        const textarea = document.getElementById('ans-' + qid);
+        if (textarea) {
+          textarea.value = val;
+          answers[qid] = val;
+          textarea.classList.add('has-content');
+        }
+      }
+    }
+
+    // Restore skipped
+    if (stored.skipped) {
+      for (const qid of stored.skipped) {
+        const skipCb = document.getElementById('skip-' + qid);
+        if (!skipCb) continue;
+        skipCb.checked = true;
+        skipped.add(qid);
+        const textarea = document.getElementById('ans-' + qid);
+        if (textarea) { textarea.disabled = true; textarea.classList.remove('has-content'); }
+        const confirmLabel = document.getElementById('confirm-label-' + qid);
+        if (confirmLabel) confirmLabel.classList.add('disabled');
+        const confirmCb = document.getElementById('confirm-' + qid);
+        if (confirmCb) { confirmCb.checked = false; }
+      }
+    }
+
+    // Restore confirmed (only if not skipped)
+    if (stored.confirmed) {
+      for (const qid of stored.confirmed) {
+        if (skipped.has(qid)) continue;
+        const confirmCb = document.getElementById('confirm-' + qid);
+        if (confirmCb) { confirmCb.checked = true; confirmed.add(qid); }
+      }
+    }
+
+    // Refresh all visual states
+    const allQids = [...document.querySelectorAll('.question-block[data-qid]')]
+      .map(el => el.dataset.qid);
+    allQids.forEach(qid => { updateTocItem(qid); updateBlockClass(qid); });
+    updateProgress();
+
+    // Show restoration banner if there was meaningful state
+    if (stored.respondent || stored.skipped?.length || stored.confirmed?.length ||
+        Object.keys(stored.answers || {}).length) {
+      showRestoreBanner();
+    }
+  }
+
+  function showRestoreBanner() {
+    const main = document.getElementById('main-content');
+    if (!main || document.getElementById('restore-banner')) return;
+    const banner = document.createElement('div');
+    banner.className = 'restore-banner';
+    banner.id = 'restore-banner';
+    banner.innerHTML = `
+      <div class="restore-banner-text">
+        <strong class="en-only">&#x1F4BE; Draft restored</strong>
+        <strong class="zh-only">&#x1F4BE; 已恢复上次草稿</strong>
+        <span class="en-only"> — Your previous progress was saved and has been restored.</span>
+        <span class="zh-only"> — 已自动恢复您上次填写的内容。</span>
+      </div>
+      <button class="restore-discard-btn" onclick="discardSavedState()">
+        <span class="en-only">Discard &amp; start over</span>
+        <span class="zh-only">丢弃并重新开始</span>
+      </button>`;
+    main.insertBefore(banner, main.firstChild);
+  }
+
+  function discardSavedState() {
+    document.getElementById('restore-banner')?.remove();
+    clearAll();
+  }
+
   // ── Load YAML ─────────────────────────────────────────────────────────────
   async function loadQuestionnaire() {
     try {
@@ -879,6 +1028,7 @@
 
     buildToc();
     updateProgress();
+    restoreState();
     initIntersectionObserver();
   }
 
@@ -1054,6 +1204,7 @@
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    scheduleSave();
   }
 
   // ── Skip change ───────────────────────────────────────────────────────────
@@ -1084,6 +1235,7 @@
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    saveState();
   }
 
   // ── Confirm change ────────────────────────────────────────────────────────
@@ -1097,6 +1249,7 @@
     updateTocItem(qid);
     updateBlockClass(qid);
     updateProgress();
+    saveState();
   }
 
   // ── IntersectionObserver ──────────────────────────────────────────────────
@@ -1169,6 +1322,7 @@
       el.classList.remove('state-answered', 'state-confirmed', 'state-skipped')
     );
     updateProgress();
+    localStorage.removeItem(STORAGE_KEY);
   }
 
   // ── Download answers ──────────────────────────────────────────────────────
