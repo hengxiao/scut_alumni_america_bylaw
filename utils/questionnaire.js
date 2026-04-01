@@ -148,6 +148,12 @@ function scheduleSave() {
   saveTimer = setTimeout(saveState, 800);
 }
 
+// Flush on page unload so debounced saves aren't lost on back/refresh
+window.addEventListener('beforeunload', () => {
+  clearTimeout(saveTimer);
+  saveState();
+});
+
 function restoreState() {
   let stored;
   try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return; }
@@ -231,7 +237,25 @@ function showRestoreBanner() {
 
 function discardSavedState() {
   document.getElementById('restore-banner')?.remove();
-  clearAll();
+  // Clear without showing a second confirm dialog
+  document.querySelectorAll('textarea[data-qid]').forEach(t => {
+    t.value = ''; t.classList.remove('has-content'); t.disabled = false;
+  });
+  document.querySelectorAll('input[type="checkbox"][data-qid]').forEach(c => { c.checked = false; });
+  document.querySelectorAll('.question-block').forEach(b =>
+    b.classList.remove('is-skipped', 'is-answered', 'is-confirmed')
+  );
+  document.querySelectorAll('.toc-q-item').forEach(el =>
+    el.classList.remove('state-answered', 'state-confirmed', 'state-skipped')
+  );
+  Object.keys(answers).forEach(k => delete answers[k]);
+  skipped.clear();
+  confirmed.clear();
+  document.getElementById('respondent-name').value = '';
+  getAllQids().forEach(qid => updateConfirmPill(qid));
+  updateProgress();
+  updateDownloadBtn();
+  localStorage.removeItem(STORAGE_KEY);
 }
 
 // ── Load YAML ─────────────────────────────────────────────────────────────
