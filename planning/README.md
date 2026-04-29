@@ -35,6 +35,7 @@ Each topic directory contains the same three files:
 | `11-conflict-of-interest/` | Rules for identifying and managing conflicts of interest among officers, board members, and committee members. |
 | `12-dissolution/` | The procedure for winding down the organization and distributing or transferring its assets if it ever dissolves. |
 | `13-federal-irs-501c7-compliance/` | Requirements that apply to the organization as a potential IRS 501(c)(7) social club, including income limits and public benefit restrictions. |
+| `14-independent-status/` | The organization's independence from South China University of Technology, the Chinese government, and any foreign governmental body, including provisions to prevent foreign oversight, protect member privacy, and respond to foreign influence attempts. |
 
 ---
 
